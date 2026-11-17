@@ -31,7 +31,7 @@ const ResumeCard = ({
             try {
                 const blob = await fs.read(imagePath);
                 if (!blob || !isMounted) return;
-                createdUrl = URL.createObjectURL(blob);
+                createdUrl = URL.createObjectURL(new Blob([blob], { type: 'image/png' }));
                 if (isMounted) setResumeUrl(createdUrl);
             } catch (err) {
                 console.error("Failed to load resume image:", err);

@@ -9,7 +9,7 @@ interface KVItem {
 interface PuterStore {
   auth: {
     isAuthenticated: boolean;
-    user: null;
+    user: { username: string } | null;
     signIn: () => void;
     signOut: () => void;
   };
@@ -237,52 +237,28 @@ async function mockAIFeedback(filePath: string, instructions: string): Promise<a
 }
 
 // Create the store
-const localStorage = new LocalStorage();
+// NOTE: do not name the KV instance `localStorage` — it would shadow the browser
+// global inside the class methods and silently break all persistence.
+const localKV = new LocalStorage();
 const fileStorage = new FileStorage();
 
-export const usePuterStore = (): PuterStore => {
-  return {
-    auth: {
-      isAuthenticated: true,
-      user: mockUser,
-      signIn: () => {},
-      signOut: () => {},
-    },
-    isLoading: false,
-    error: null,
-    kv: {
-      get: (key: string) => localStorage.get(key),
-      set: (key: string, value: string) => localStorage.set(key, value),
-      list: (pattern: string) => localStorage.list(pattern),
-      delete: (key: string) => localStorage.delete(key),
-      flush: () => localStorage.flush(),
-    },
-    fs: {
-      upload: (files: File[]) => fileStorage.upload(files),
-      read: (path: string) => fileStorage.read(path),
-      readDir: (path: string) => fileStorage.readDir(path),
-      delete: (path: string) => fileStorage.delete(path),
-    },
-    ai: {
-      feedback: mockAIFeedback,
-    },
-  };
-};
-
-// For non-hook usage
-export const puter = {
+// Single stable store instance. Returning a new object from the hook on every
+// render makes components that depend on kv/fs re-run their effects forever.
+const store: PuterStore = {
   auth: {
     isAuthenticated: true,
     user: mockUser,
     signIn: () => {},
     signOut: () => {},
   },
+  isLoading: false,
+  error: null,
   kv: {
-    get: (key: string) => localStorage.get(key),
-    set: (key: string, value: string) => localStorage.set(key, value),
-    list: (pattern: string) => localStorage.list(pattern),
-    delete: (key: string) => localStorage.delete(key),
-    flush: () => localStorage.flush(),
+    get: (key: string) => localKV.get(key),
+    set: (key: string, value: string) => localKV.set(key, value),
+    list: (pattern: string) => localKV.list(pattern),
+    delete: (key: string) => localKV.delete(key),
+    flush: () => localKV.flush(),
   },
   fs: {
     upload: (files: File[]) => fileStorage.upload(files),
@@ -294,3 +270,8 @@ export const puter = {
     feedback: mockAIFeedback,
   },
 };
+
+export const usePuterStore = (): PuterStore => store;
+
+// For non-hook usage
+export const puter = store;

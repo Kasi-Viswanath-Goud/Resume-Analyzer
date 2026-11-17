@@ -18,7 +18,7 @@ const ATS = ({ score = 0, suggestions = [] }: ATSProps) => {
     };
 
     const variant = getScoreVariant(safeScore);
-    const iconMap = {
+    const iconMap: Record<string, string> = {
         good: '/icons/ats-good.svg',
         warning: '/icons/ats-warning.svg',
         bad: '/icons/ats-bad.svg',

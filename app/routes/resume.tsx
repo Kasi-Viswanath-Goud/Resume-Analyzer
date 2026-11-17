@@ -95,7 +95,7 @@ const Resume = () => {
                         } else {
                             const imageBlob = await fs.read(data.imagePath);
                             if (imageBlob && isMounted) {
-                                createdImageUrl = URL.createObjectURL(imageBlob);
+                                createdImageUrl = URL.createObjectURL(new Blob([imageBlob], { type: 'image/png' }));
                                 setImageUrl(createdImageUrl);
                             }
                         }
