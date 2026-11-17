@@ -8,9 +8,7 @@ interface AccordionContextType {
     isItemActive: (id: string) => boolean;
 }
 
-const AccordionContext = createContext<AccordionContextType | undefined>(
-    undefined
-);
+const AccordionContext = createContext<AccordionContextType | undefined>(undefined);
 
 const useAccordion = () => {
     const context = useContext(AccordionContext);
@@ -22,7 +20,7 @@ const useAccordion = () => {
 
 interface AccordionProps {
     children: ReactNode;
-    defaultOpen?: string;
+    defaultOpen?: string | string[];
     allowMultiple?: boolean;
     className?: string;
 }
@@ -33,9 +31,8 @@ export const Accordion = ({
     allowMultiple = false,
     className = "",
 }: AccordionProps) => {
-    const [activeItems, setActiveItems] = useState<string[]>(
-        defaultOpen ? [defaultOpen] : []
-    );
+    const defaultActive = Array.isArray(defaultOpen) ? defaultOpen : defaultOpen ? [defaultOpen] : [];
+    const [activeItems, setActiveItems] = useState<string[]>(defaultActive);
 
     const toggleItem = (id: string) => {
         setActiveItems((prev) => {
@@ -52,10 +49,8 @@ export const Accordion = ({
     const isItemActive = (id: string) => activeItems.includes(id);
 
     return (
-        <AccordionContext.Provider
-            value={{ activeItems, toggleItem, isItemActive }}
-        >
-            <div className={`space-y-2 ${className}`}>{children}</div>
+        <AccordionContext.Provider value={{ activeItems, toggleItem, isItemActive }}>
+            <div className={cn("space-y-2", className)}>{children}</div>
         </AccordionContext.Provider>
     );
 };
@@ -72,7 +67,7 @@ export const AccordionItem = ({
     className = "",
 }: AccordionItemProps) => {
     return (
-        <div className={`overflow-hidden border-b border-gray-200 ${className}`}>
+        <div className={cn("overflow-hidden border border-[var(--color-border-light)] rounded-xl", className)}>
             {children}
         </div>
     );
@@ -96,25 +91,6 @@ export const AccordionHeader = ({
     const { toggleItem, isItemActive } = useAccordion();
     const isActive = isItemActive(itemId);
 
-    const defaultIcon = (
-        <svg
-            className={cn("w-5 h-5 transition-transform duration-200", {
-                "rotate-180": isActive,
-            })}
-            fill="none"
-            stroke="#98A2B3"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-            />
-        </svg>
-    );
-
     const handleClick = () => {
         toggleItem(itemId);
     };
@@ -122,18 +98,35 @@ export const AccordionHeader = ({
     return (
         <button
             onClick={handleClick}
-            className={`
-        w-full px-4 py-3 text-left
-        focus:outline-none
-        transition-colors duration-200 flex items-center justify-between cursor-pointer
-        ${className}
-      `}
+            className={cn(
+                "w-full px-6 py-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand-500)] focus-visible:ring-offset-2 focus-visible:ring-offset-white transition-colors duration-200 flex items-center justify-between cursor-pointer",
+                "hover:bg-[var(--color-bg-secondary)]",
+                className,
+            )}
+            aria-expanded={isActive}
+            aria-controls={`${itemId}-content`}
         >
-            <div className="flex items-center space-x-3">
-                {iconPosition === "left" && (icon || defaultIcon)}
-                <div className="flex-1">{children}</div>
+            <div className="flex items-center gap-4 flex-1">
+                {iconPosition === "left" && (
+                    <span className="text-[var(--color-text-tertiary)] shrink-0">{icon}</span>
+                )}
+                <div className="flex-1 min-w-0">{children}</div>
+                {iconPosition === "right" && (
+                    <span className="text-[var(--color-text-tertiary)] shrink-0">{icon}</span>
+                )}
             </div>
-            {iconPosition === "right" && (icon || defaultIcon)}
+            <svg
+                className={cn(
+                    "w-5 h-5 text-[var(--color-text-tertiary)] shrink-0 transition-transform duration-200",
+                    isActive && "rotate-180",
+                )}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
         </button>
     );
 };
@@ -154,13 +147,16 @@ export const AccordionContent = ({
 
     return (
         <div
-            className={`
-        overflow-hidden transition-all duration-300 ease-in-out
-        ${isActive ? "max-h-fit opacity-100" : "max-h-0 opacity-0"}
-        ${className}
-      `}
+            id={`${itemId}-content`}
+            role="region"
+            aria-hidden={!isActive}
+            className={cn(
+                "overflow-hidden transition-all duration-300 ease-in-out",
+                isActive ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0",
+                className,
+            )}
         >
-            <div className="px-4 py-3 ">{children}</div>
+            <div className="px-6 pb-6 animate-fade-in">{children}</div>
         </div>
     );
 };

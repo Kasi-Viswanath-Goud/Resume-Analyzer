@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import ScoreCircle from "~/components/ScoreCircle";
 import { useEffect, useState } from "react";
 import { usePuterStore } from "~/lib/puter";
+import { cn } from "~/lib/utils";
 
 const ResumeCard = ({
     resume: { id, companyName, jobTitle, feedback, imagePath },
@@ -18,7 +19,6 @@ const ResumeCard = ({
         const loadResume = async () => {
             if (!imagePath) return;
 
-            // Direct or static asset path
             if (
                 imagePath.startsWith('/') ||
                 imagePath.startsWith('http') ||
@@ -63,40 +63,80 @@ const ResumeCard = ({
     return (
         <Link
             to={`/resume/${id}`}
-            className="resume-card animate-in fade-in duration-1000 hover:shadow-lg transition-shadow"
+            className="card-interactive group p-0 overflow-hidden animate-fade-in"
         >
-            <div className="resume-card-header">
-                <div className="flex flex-col gap-2 min-w-0 flex-1">
-                    {companyName && (
-                        <h2 className="!text-black font-bold break-words truncate">
-                            {companyName}
-                        </h2>
-                    )}
-                    {jobTitle && (
-                        <h3 className="text-lg break-words text-gray-500 truncate">
-                            {jobTitle}
-                        </h3>
-                    )}
-                    {!companyName && !jobTitle && (
-                        <h2 className="!text-black font-bold">Resume</h2>
-                    )}
-                </div>
-                <div className="flex-shrink-0">
-                    <ScoreCircle score={overallScore} />
-                </div>
-            </div>
-            <div className="gradient-border animate-in fade-in duration-1000 flex-1 flex items-center justify-center overflow-hidden">
+            {/* Preview Image */}
+            <div className="relative aspect-[4/5] overflow-hidden bg-[var(--color-neutral-100)]">
                 {resumeUrl ? (
                     <img
                         src={resumeUrl}
                         alt={`${companyName || 'Resume'} preview`}
-                        className="w-full h-[350px] max-sm:h-[200px] object-cover object-top rounded-xl"
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                 ) : (
-                    <div className="w-full h-[350px] max-sm:h-[200px] flex items-center justify-center bg-gray-50 rounded-xl">
-                        <img src="/icons/info.svg" alt="Resume preview" className="size-12 opacity-30" />
+                    <div className="w-full h-full flex items-center justify-center">
+                        <img src="/icons/info.svg" alt="Resume preview" className="w-12 h-12 opacity-30" />
                     </div>
                 )}
+                {/* Score overlay */}
+                <div className="absolute top-3 right-3">
+                    <ScoreCircle score={overallScore} size="sm" showLabel={false} />
+                </div>
+            </div>
+
+            {/* Card Content */}
+            <div className="p-5 space-y-4">
+                <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0 flex-1">
+                        {companyName && (
+                            <h3 className="font-semibold text-[var(--color-text-primary)] truncate">{companyName}</h3>
+                        )}
+                        {jobTitle && (
+                            <p className="text-sm text-[var(--color-text-tertiary)] truncate mt-0.5">{jobTitle}</p>
+                        )}
+                        {!companyName && !jobTitle && (
+                            <h3 className="font-semibold text-[var(--color-text-primary)]">Resume</h3>
+                        )}
+                    </div>
+                    <span className={cn(
+                        "badge px-2 py-1 text-xs shrink-0",
+                        overallScore >= 70 && "badge-success",
+                        overallScore >= 50 && overallScore < 70 && "badge-warning",
+                        overallScore < 50 && "badge-error",
+                    )}>
+                        {overallScore}/100
+                    </span>
+                </div>
+
+                {/* Quick stats */}
+                {parsedFeedback && (
+                    <div className="grid grid-cols-4 gap-2 pt-2 border-t border-[var(--color-border-light)]">
+                        <div className="text-center">
+                            <p className="text-2xl font-display font-bold text-[var(--color-brand-600)]">{parsedFeedback.ATS?.score ?? 0}</p>
+                            <p className="text-xs text-[var(--color-text-tertiary)]">ATS</p>
+                        </div>
+                        <div className="text-center">
+                            <p className="text-2xl font-display font-bold text-[var(--color-brand-600)]">{parsedFeedback.content?.score ?? 0}</p>
+                            <p className="text-xs text-[var(--color-text-tertiary)]">Content</p>
+                        </div>
+                        <div className="text-center">
+                            <p className="text-2xl font-display font-bold text-[var(--color-brand-600)]">{parsedFeedback.structure?.score ?? 0}</p>
+                            <p className="text-xs text-[var(--color-text-tertiary)]">Structure</p>
+                        </div>
+                        <div className="text-center">
+                            <p className="text-2xl font-display font-bold text-[var(--color-brand-600)]">{parsedFeedback.skills?.score ?? 0}</p>
+                            <p className="text-xs text-[var(--color-text-tertiary)]">Skills</p>
+                        </div>
+                    </div>
+                )}
+
+                {/* Action hint */}
+                <div className="flex items-center justify-center gap-1.5 text-sm text-[var(--color-brand-600)] font-medium pt-2">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
+                    </svg>
+                    View Details
+                </div>
             </div>
         </Link>
     );
