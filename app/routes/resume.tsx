@@ -12,7 +12,7 @@ export const meta = () => [
 ];
 
 const Resume = () => {
-    const { auth, isLoading, fs, kv } = usePuterStore();
+    const { fs, kv } = usePuterStore();
     const { id } = useParams();
     const [imageUrl, setImageUrl] = useState('');
     const [resumeUrl, setResumeUrl] = useState('');
@@ -22,19 +22,11 @@ const Resume = () => {
     const [resumeData, setResumeData] = useState<{ companyName?: string; jobTitle?: string } | null>(null);
     const navigate = useNavigate();
 
-    // Redirect to auth if not authenticated after loading finishes
+    // Load resume data
     useEffect(() => {
-        if (!isLoading && !auth.isAuthenticated) {
-            navigate(`/auth?next=/resume/${id}`);
-        }
-    }, [isLoading, auth.isAuthenticated, id, navigate]);
-
-    // Load resume data once user is authenticated
-    useEffect(() => {
-        if (!auth.isAuthenticated || !id) {
-            if (!isLoading && !auth.isAuthenticated) {
-                setLoadingData(false);
-            }
+        if (!id) {
+            setErrorMessage('Invalid resume ID.');
+            setLoadingData(false);
             return;
         }
 
@@ -50,7 +42,7 @@ const Resume = () => {
                 const resumeDataStr = await kv.get(`resume:${id}`);
                 if (!resumeDataStr) {
                     if (isMounted) {
-                        setErrorMessage('Resume not found. It may have been deleted.');
+                        setErrorMessage('Resume not found. It may have been deleted or expired.');
                         setLoadingData(false);
                     }
                     return;
@@ -128,9 +120,9 @@ const Resume = () => {
             if (createdPdfUrl) URL.revokeObjectURL(createdPdfUrl);
             if (createdImageUrl) URL.revokeObjectURL(createdImageUrl);
         };
-    }, [id, auth.isAuthenticated, isLoading, kv, fs]);
+    }, [id, kv, fs]);
 
-    const showLoading = isLoading || loadingData;
+    const showLoading = loadingData;
     const overallScore = feedback?.overallScore ?? 0;
     const atsScore = feedback?.ATS?.score ?? 0;
 
@@ -149,17 +141,11 @@ const Resume = () => {
 
     const ScoreRing = ({ score, size = 120, strokeWidth = 10, showLabel = true }: { score: number; size?: number; strokeWidth?: number; showLabel?: boolean }) => {
         const safeScore = Math.min(Math.max(Math.round(score || 0), 0), 100);
+        const color = getScoreColor(safeScore);
         const radius = (size - strokeWidth) / 2;
         const circumference = 2 * Math.PI * radius;
         const progress = safeScore / 100;
         const strokeDashoffset = circumference * (1 - progress);
-        const color = getScoreColor(safeScore);
-
-        const gradientColors = {
-            accent: 'from-[var(--color-accent-500)] to-[var(--color-accent-400)]',
-            warning: 'from-[var(--color-warning-500)] to-[var(--color-warning-400)]',
-            error: 'from-[var(--color-error-500)] to-[var(--color-error-400)]',
-        };
 
         return (
             <div className="relative flex-shrink-0" style={{ width: size, height: size }}>
@@ -213,8 +199,11 @@ const Resume = () => {
                     </div>
                     <h2 className="text-2xl font-semibold text-[var(--color-text-primary)] mb-2">Unable to Load Results</h2>
                     <p className="text-[var(--color-text-secondary)] mb-6">{errorMessage}</p>
-                    <Link to="/" className="btn-primary w-full justify-center">
-                        Return to Dashboard
+                    <Link to="/upload" className="btn-primary w-full justify-center">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                        </svg>
+                        Scan a New Resume
                     </Link>
                 </div>
             </main>
@@ -233,7 +222,7 @@ const Resume = () => {
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                                 </svg>
-                                Dashboard
+                                Home
                             </Link>
                         </li>
                         <li aria-hidden="true">
@@ -347,7 +336,7 @@ const Resume = () => {
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                                     </svg>
-                                    Back to Dashboard
+                                    Back to Home
                                 </Link>
                             </div>
                         </aside>

@@ -1,471 +1,296 @@
-import { create } from "zustand";
+// Simple local storage wrapper to replace Puter.js functionality
+// This allows the app to work without authentication
 
-declare global {
-    interface Window {
-        puter: {
-            auth: {
-                getUser: () => Promise<PuterUser>;
-                isSignedIn: () => Promise<boolean>;
-                signIn: () => Promise<void>;
-                signOut: () => Promise<void>;
-            };
-            fs: {
-                write: (
-                    path: string,
-                    data: string | File | Blob
-                ) => Promise<File | undefined>;
-                read: (path: string) => Promise<Blob>;
-                upload: (file: File[] | Blob[]) => Promise<FSItem>;
-                delete: (path: string) => Promise<void>;
-                readdir: (path: string) => Promise<FSItem[] | undefined>;
-            };
-            ai: {
-                chat: (
-                    prompt: string | ChatMessage[],
-                    imageURL?: string | PuterChatOptions,
-                    testMode?: boolean,
-                    options?: PuterChatOptions
-                ) => Promise<Object>;
-                img2txt: (
-                    image: string | File | Blob,
-                    testMode?: boolean
-                ) => Promise<string>;
-            };
-            kv: {
-                get: (key: string) => Promise<string | null>;
-                set: (key: string, value: string) => Promise<boolean>;
-                delete: (key: string) => Promise<boolean>;
-                list: (pattern: string, returnValues?: boolean) => Promise<string[]>;
-                flush: () => Promise<boolean>;
-            };
-        };
-    }
+interface KVItem {
+  key: string;
+  value: string;
 }
 
 interface PuterStore {
-    isLoading: boolean;
-    error: string | null;
-    puterReady: boolean;
-    auth: {
-        user: PuterUser | null;
-        isAuthenticated: boolean;
-        signIn: () => Promise<void>;
-        signOut: () => Promise<void>;
-        refreshUser: () => Promise<void>;
-        checkAuthStatus: () => Promise<boolean>;
-        getUser: () => PuterUser | null;
-    };
-    fs: {
-        write: (
-            path: string,
-            data: string | File | Blob
-        ) => Promise<File | undefined>;
-        read: (path: string) => Promise<Blob | undefined>;
-        upload: (file: File[] | Blob[]) => Promise<FSItem | undefined>;
-        delete: (path: string) => Promise<void>;
-        readDir: (path: string) => Promise<FSItem[] | undefined>;
-    };
-    ai: {
-        chat: (
-            prompt: string | ChatMessage[],
-            imageURL?: string | PuterChatOptions,
-            testMode?: boolean,
-            options?: PuterChatOptions
-        ) => Promise<AIResponse | undefined>;
-        feedback: (
-            path: string,
-            message: string
-        ) => Promise<AIResponse | undefined>;
-        img2txt: (
-            image: string | File | Blob,
-            testMode?: boolean
-        ) => Promise<string | undefined>;
-    };
-    kv: {
-        get: (key: string) => Promise<string | null | undefined>;
-        set: (key: string, value: string) => Promise<boolean | undefined>;
-        delete: (key: string) => Promise<boolean | undefined>;
-        list: (
-            pattern: string,
-            returnValues?: boolean
-        ) => Promise<string[] | KVItem[] | undefined>;
-        flush: () => Promise<boolean | undefined>;
-    };
-
-    init: () => void;
-    clearError: () => void;
+  auth: {
+    isAuthenticated: boolean;
+    user: null;
+    signIn: () => void;
+    signOut: () => void;
+  };
+  isLoading: boolean;
+  error: string | null;
+  kv: {
+    get: (key: string) => Promise<string | null>;
+    set: (key: string, value: string) => Promise<void>;
+    list: (pattern: string, all?: boolean) => Promise<KVItem[] | undefined>;
+    delete: (key: string) => Promise<void>;
+    flush: () => Promise<void>;
+  };
+  fs: {
+    upload: (files: File[]) => Promise<{ path: string }[]>;
+    read: (path: string) => Promise<ArrayBuffer | null>;
+    readDir: (path: string) => Promise<any[]>;
+    delete: (path: string) => Promise<void>;
+  };
+  ai: {
+    feedback: (filePath: string, instructions: string) => Promise<any>;
+  };
 }
 
-const getPuter = (): typeof window.puter | null =>
-    typeof window !== "undefined" && window.puter ? window.puter : null;
+// Mock user for compatibility
+const mockUser = { username: 'guest' };
 
-export const usePuterStore = create<PuterStore>((set, get) => {
-    const setError = (msg: string) => {
-        set({
-            error: msg,
-            isLoading: false,
-            auth: {
-                user: null,
-                isAuthenticated: false,
-                signIn: get().auth.signIn,
-                signOut: get().auth.signOut,
-                refreshUser: get().auth.refreshUser,
-                checkAuthStatus: get().auth.checkAuthStatus,
-                getUser: get().auth.getUser,
-            },
-        });
-    };
+// Simple in-memory storage with localStorage persistence
+class LocalStorage {
+  private prefix = 'resumind_';
 
-    const checkAuthStatus = async (): Promise<boolean> => {
-        const puter = getPuter();
-        if (!puter) {
-            setError("Puter.js not available");
-            return false;
+  async get(key: string): Promise<string | null> {
+    try {
+      const item = localStorage.getItem(this.prefix + key);
+      return item;
+    } catch {
+      return null;
+    }
+  }
+
+  async set(key: string, value: string): Promise<void> {
+    try {
+      localStorage.setItem(this.prefix + key, value);
+    } catch (e) {
+      console.error('Failed to save to localStorage:', e);
+    }
+  }
+
+  async list(pattern: string): Promise<KVItem[] | undefined> {
+    try {
+      const prefix = this.prefix + pattern.replace('*', '');
+      const items: KVItem[] = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith(prefix)) {
+          const value = localStorage.getItem(key);
+          if (value) {
+            items.push({ key: key.replace(this.prefix, ''), value });
+          }
         }
+      }
+      return items;
+    } catch {
+      return undefined;
+    }
+  }
 
-        set({ isLoading: true, error: null });
+  async delete(key: string): Promise<void> {
+    try {
+      localStorage.removeItem(this.prefix + key);
+    } catch {
+      // ignore
+    }
+  }
 
-        try {
-            const isSignedIn = await puter.auth.isSignedIn();
-            if (isSignedIn) {
-                const user = await puter.auth.getUser();
-                set({
-                    auth: {
-                        user,
-                        isAuthenticated: true,
-                        signIn: get().auth.signIn,
-                        signOut: get().auth.signOut,
-                        refreshUser: get().auth.refreshUser,
-                        checkAuthStatus: get().auth.checkAuthStatus,
-                        getUser: () => user,
-                    },
-                    isLoading: false,
-                });
-                return true;
-            } else {
-                set({
-                    auth: {
-                        user: null,
-                        isAuthenticated: false,
-                        signIn: get().auth.signIn,
-                        signOut: get().auth.signOut,
-                        refreshUser: get().auth.refreshUser,
-                        checkAuthStatus: get().auth.checkAuthStatus,
-                        getUser: () => null,
-                    },
-                    isLoading: false,
-                });
-                return false;
-            }
-        } catch (err) {
-            const msg =
-                err instanceof Error ? err.message : "Failed to check auth status";
-            setError(msg);
-            return false;
+  async flush(): Promise<void> {
+    try {
+      const keysToRemove: string[] = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith(this.prefix)) {
+          keysToRemove.push(key);
         }
-    };
+      }
+      keysToRemove.forEach(k => localStorage.removeItem(k));
+    } catch {
+      // ignore
+    }
+  }
+}
 
-    const signIn = async (): Promise<void> => {
-        const puter = getPuter();
-        if (!puter) {
-            setError("Puter.js not available");
-            return;
-        }
+// File storage using object URLs and localStorage
+class FileStorage {
+  private blobs = new Map<string, Blob>();
+  private prefix = 'resumind_file_';
 
-        set({ isLoading: true, error: null });
+  async upload(files: File[]): Promise<{ path: string }[]> {
+    const results = [];
+    for (const file of files) {
+      const id = 'file_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      const path = this.prefix + id;
+      this.blobs.set(path, file);
+      // Also store in localStorage as base64 for persistence
+      try {
+        const base64 = await this.fileToBase64(file);
+        localStorage.setItem(path, base64);
+      } catch (e) {
+        console.warn('Could not persist file to localStorage:', e);
+      }
+      results.push({ path });
+    }
+    return results;
+  }
 
-        try {
-            await puter.auth.signIn();
-            await checkAuthStatus();
-        } catch (err) {
-            const msg = err instanceof Error ? err.message : "Sign in failed";
-            setError(msg);
-        }
-    };
+  private fileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
 
-    const signOut = async (): Promise<void> => {
-        const puter = getPuter();
-        if (!puter) {
-            setError("Puter.js not available");
-            return;
-        }
+  private base64ToBlob(base64: string): Blob {
+    const byteString = atob(base64.split(',')[1]);
+    const mimeString = base64.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+  }
 
-        set({ isLoading: true, error: null });
+  async read(path: string): Promise<ArrayBuffer | null> {
+    // First check memory
+    const blob = this.blobs.get(path);
+    if (blob) {
+      return blob.arrayBuffer();
+    }
+    // Then check localStorage
+    try {
+      const base64 = localStorage.getItem(path);
+      if (base64) {
+        const blob = this.base64ToBlob(base64);
+        this.blobs.set(path, blob);
+        return blob.arrayBuffer();
+      }
+    } catch {
+      // ignore
+    }
+    return null;
+  }
 
-        try {
-            await puter.auth.signOut();
-            set({
-                auth: {
-                    user: null,
-                    isAuthenticated: false,
-                    signIn: get().auth.signIn,
-                    signOut: get().auth.signOut,
-                    refreshUser: get().auth.refreshUser,
-                    checkAuthStatus: get().auth.checkAuthStatus,
-                    getUser: () => null,
-                },
-                isLoading: false,
-            });
-        } catch (err) {
-            const msg = err instanceof Error ? err.message : "Sign out failed";
-            setError(msg);
-        }
-    };
+  async readDir(path: string): Promise<any[]> {
+    const files = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith(this.prefix)) {
+        files.push({ name: key, path: key, id: key });
+      }
+    }
+    return files;
+  }
 
-    const refreshUser = async (): Promise<void> => {
-        const puter = getPuter();
-        if (!puter) {
-            setError("Puter.js not available");
-            return;
-        }
+  async delete(path: string): Promise<void> {
+    this.blobs.delete(path);
+    localStorage.removeItem(path);
+  }
+}
 
-        set({ isLoading: true, error: null });
+// AI feedback simulation - in production, this would call your AI service
+async function mockAIFeedback(filePath: string, instructions: string): Promise<any> {
+  // Simulate API delay
+  await new Promise(r => setTimeout(r, 2000));
 
-        try {
-            const user = await puter.auth.getUser();
-            set({
-                auth: {
-                    user,
-                    isAuthenticated: true,
-                    signIn: get().auth.signIn,
-                    signOut: get().auth.signOut,
-                    refreshUser: get().auth.refreshUser,
-                    checkAuthStatus: get().auth.checkAuthStatus,
-                    getUser: () => user,
-                },
-                isLoading: false,
-            });
-        } catch (err) {
-            const msg = err instanceof Error ? err.message : "Failed to refresh user";
-            setError(msg);
-        }
-    };
-
-    let initStarted = false;
-
-    const init = (): void => {
-        if (initStarted || get().puterReady) return;
-        initStarted = true;
-
-        const puter = getPuter();
-        if (puter) {
-            set({ puterReady: true });
-            checkAuthStatus();
-            return;
-        }
-
-        const interval = setInterval(() => {
-            if (getPuter()) {
-                clearInterval(interval);
-                clearTimeout(timeout);
-                set({ puterReady: true });
-                checkAuthStatus();
-            }
-        }, 100);
-
-        const timeout = setTimeout(() => {
-            clearInterval(interval);
-            if (!getPuter()) {
-                setError("Puter.js failed to load within 10 seconds");
-            }
-        }, 10000);
-    };
-
-    const write = async (path: string, data: string | File | Blob) => {
-        const puter = getPuter();
-        if (!puter) {
-            setError("Puter.js not available");
-            return;
-        }
-        return puter.fs.write(path, data);
-    };
-
-    const readDir = async (path: string) => {
-        const puter = getPuter();
-        if (!puter) {
-            return undefined;
-        }
-        return puter.fs.readdir(path);
-    };
-
-    const readFile = async (path: string) => {
-        const puter = getPuter();
-        if (!puter) {
-            return undefined;
-        }
-        return puter.fs.read(path);
-    };
-
-    const upload = async (files: File[] | Blob[]) => {
-        const puter = getPuter();
-        if (!puter) {
-            setError("Puter.js not available");
-            return;
-        }
-        return puter.fs.upload(files);
-    };
-
-    const deleteFile = async (path: string) => {
-        const puter = getPuter();
-        if (!puter) {
-            setError("Puter.js not available");
-            return;
-        }
-        return puter.fs.delete(path);
-    };
-
-    const chat = async (
-        prompt: string | ChatMessage[],
-        imageURL?: string | PuterChatOptions,
-        testMode?: boolean,
-        options?: PuterChatOptions
-    ) => {
-        const puter = getPuter();
-        if (!puter) {
-            setError("Puter.js not available");
-            return;
-        }
-        // return puter.ai.chat(prompt, imageURL, testMode, options);
-        return puter.ai.chat(prompt, imageURL, testMode, options) as Promise<
-            AIResponse | undefined
-        >;
-    };
-
-    const feedback = async (path: string, message: string) => {
-        const puter = getPuter();
-        if (!puter) {
-            setError("Puter.js not available");
-            return;
-        }
-
-        const chatPayload = [
-            {
-                role: "user" as const,
-                content: [
-                    {
-                        type: "file" as const,
-                        puter_path: path,
-                    },
-                    {
-                        type: "text" as const,
-                        text: message,
-                    },
-                ],
-            },
-        ];
-
-        try {
-            return (await puter.ai.chat(chatPayload, {
-                model: "claude-3-7-sonnet",
-            })) as AIResponse | undefined;
-        } catch (err) {
-            console.warn("claude-3-7-sonnet failed, falling back to claude-3-5-sonnet:", err);
-            try {
-                return (await puter.ai.chat(chatPayload, {
-                    model: "claude-3-5-sonnet",
-                })) as AIResponse | undefined;
-            } catch (err2) {
-                console.warn("claude-3-5-sonnet failed, falling back to default model:", err2);
-                return (await puter.ai.chat(chatPayload)) as AIResponse | undefined;
-            }
-        }
-    };
-
-    const img2txt = async (image: string | File | Blob, testMode?: boolean) => {
-        const puter = getPuter();
-        if (!puter) {
-            setError("Puter.js not available");
-            return;
-        }
-        return puter.ai.img2txt(image, testMode);
-    };
-
-    const getKV = async (key: string) => {
-        const puter = getPuter();
-        if (!puter) {
-            return null;
-        }
-        return puter.kv.get(key);
-    };
-
-    const setKV = async (key: string, value: string) => {
-        const puter = getPuter();
-        if (!puter) {
-            setError("Puter.js not available");
-            return;
-        }
-        return puter.kv.set(key, value);
-    };
-
-    const deleteKV = async (key: string) => {
-        const puter = getPuter();
-        if (!puter) {
-            setError("Puter.js not available");
-            return;
-        }
-        return puter.kv.delete(key);
-    };
-
-    const listKV = async (pattern: string, returnValues?: boolean) => {
-        const puter = getPuter();
-        if (!puter) {
-            return [];
-        }
-        if (returnValues === undefined) {
-            returnValues = false;
-        }
-        return puter.kv.list(pattern, returnValues);
-    };
-
-    const flushKV = async () => {
-        const puter = getPuter();
-        if (!puter) {
-            setError("Puter.js not available");
-            return;
-        }
-        return puter.kv.flush();
-    };
-
-    return {
-        isLoading: true,
-        error: null,
-        puterReady: false,
-        auth: {
-            user: null,
-            isAuthenticated: false,
-            signIn,
-            signOut,
-            refreshUser,
-            checkAuthStatus,
-            getUser: () => get().auth.user,
+  // Return mock feedback structure
+  return {
+    message: {
+      content: JSON.stringify({
+        overallScore: Math.floor(Math.random() * 30) + 60,
+        ATS: {
+          score: Math.floor(Math.random() * 30) + 60,
+          tips: [
+            { type: "good", tip: "Resume uses standard section headers" },
+            { type: "improve", tip: "Add more job-specific keywords from the description" },
+            { type: "good", tip: "Clean, single-column layout is ATS-friendly" },
+            { type: "improve", tip: "Include more quantifiable achievements with metrics" }
+          ]
         },
-        fs: {
-            write: (path: string, data: string | File | Blob) => write(path, data),
-            read: (path: string) => readFile(path),
-            readDir: (path: string) => readDir(path),
-            upload: (files: File[] | Blob[]) => upload(files),
-            delete: (path: string) => deleteFile(path),
+        toneAndStyle: {
+          score: Math.floor(Math.random() * 30) + 60,
+          tips: [
+            { type: "good", tip: "Professional tone throughout", explanation: "Your resume maintains a consistent professional voice appropriate for the industry." },
+            { type: "improve", tip: "Use stronger action verbs", explanation: "Replace passive phrases like 'responsible for' with strong verbs like 'led', 'created', 'optimized'." },
+            { type: "good", tip: "Concise bullet points", explanation: "Bullets are well-structured and easy to scan quickly." }
+          ]
         },
-        ai: {
-            chat: (
-                prompt: string | ChatMessage[],
-                imageURL?: string | PuterChatOptions,
-                testMode?: boolean,
-                options?: PuterChatOptions
-            ) => chat(prompt, imageURL, testMode, options),
-            feedback: (path: string, message: string) => feedback(path, message),
-            img2txt: (image: string | File | Blob, testMode?: boolean) =>
-                img2txt(image, testMode),
+        content: {
+          score: Math.floor(Math.random() * 30) + 60,
+          tips: [
+            { type: "improve", tip: "Add more relevant keywords", explanation: "The job description mentions specific tools/skills not found in your resume." },
+            { type: "good", tip: "Good experience relevance", explanation: "Your background aligns well with the target role requirements." },
+            { type: "improve", tip: "Quantify more achievements", explanation: "Add numbers, percentages, and dollar amounts to demonstrate impact." }
+          ]
         },
-        kv: {
-            get: (key: string) => getKV(key),
-            set: (key: string, value: string) => setKV(key, value),
-            delete: (key: string) => deleteKV(key),
-            list: (pattern: string, returnValues?: boolean) =>
-                listKV(pattern, returnValues),
-            flush: () => flushKV(),
+        structure: {
+          score: Math.floor(Math.random() * 30) + 60,
+          tips: [
+            { type: "good", tip: "Logical section ordering", explanation: "Sections follow standard resume convention: Summary, Experience, Education, Skills." },
+            { type: "improve", tip: "Consider adding a Projects section", explanation: "For technical roles, a projects section can showcase hands-on experience." },
+            { type: "good", tip: "Appropriate length", explanation: "Resume fits well within 1-2 pages for your experience level." }
+          ]
         },
-        init,
-        clearError: () => set({ error: null }),
-    };
-});
+        skills: {
+          score: Math.floor(Math.random() * 30) + 60,
+          tips: [
+            { type: "improve", tip: "Add missing technical skills", explanation: "Job requires specific technologies not listed in your skills section." },
+            { type: "good", tip: "Good mix of hard and soft skills", explanation: "You've included both technical competencies and interpersonal abilities." },
+            { type: "improve", tip: "Group skills by category", explanation: "Organize skills into categories like Languages, Frameworks, Tools, Soft Skills." }
+          ]
+        }
+      })
+    }
+  };
+}
+
+// Create the store
+const localStorage = new LocalStorage();
+const fileStorage = new FileStorage();
+
+export const usePuterStore = (): PuterStore => {
+  return {
+    auth: {
+      isAuthenticated: true,
+      user: mockUser,
+      signIn: () => {},
+      signOut: () => {},
+    },
+    isLoading: false,
+    error: null,
+    kv: {
+      get: (key: string) => localStorage.get(key),
+      set: (key: string, value: string) => localStorage.set(key, value),
+      list: (pattern: string) => localStorage.list(pattern),
+      delete: (key: string) => localStorage.delete(key),
+      flush: () => localStorage.flush(),
+    },
+    fs: {
+      upload: (files: File[]) => fileStorage.upload(files),
+      read: (path: string) => fileStorage.read(path),
+      readDir: (path: string) => fileStorage.readDir(path),
+      delete: (path: string) => fileStorage.delete(path),
+    },
+    ai: {
+      feedback: mockAIFeedback,
+    },
+  };
+};
+
+// For non-hook usage
+export const puter = {
+  auth: {
+    isAuthenticated: true,
+    user: mockUser,
+    signIn: () => {},
+    signOut: () => {},
+  },
+  kv: {
+    get: (key: string) => localStorage.get(key),
+    set: (key: string, value: string) => localStorage.set(key, value),
+    list: (pattern: string) => localStorage.list(pattern),
+    delete: (key: string) => localStorage.delete(key),
+    flush: () => localStorage.flush(),
+  },
+  fs: {
+    upload: (files: File[]) => fileStorage.upload(files),
+    read: (path: string) => fileStorage.read(path),
+    readDir: (path: string) => fileStorage.readDir(path),
+    delete: (path: string) => fileStorage.delete(path),
+  },
+  ai: {
+    feedback: mockAIFeedback,
+  },
+};

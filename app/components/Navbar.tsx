@@ -1,8 +1,6 @@
 import { Link, useLocation } from "react-router";
-import { usePuterStore } from "~/lib/puter";
 
 const Navbar = () => {
-    const { auth } = usePuterStore();
     const location = useLocation();
 
     const navLinks = [
@@ -51,35 +49,16 @@ const Navbar = () => {
                             </svg>
                         </button>
 
-                        {/* Authenticated user */}
-                        {auth.isAuthenticated ? (
-                            <div className="flex items-center gap-3">
-                                <Link to="/upload" className="hidden sm:block btn-primary btn-sm">
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
-                                    </svg>
-                                    Scan Resume
-                                </Link>
-                                <Link to="/upload" className="hidden md:block btn-secondary btn-sm">
-                                    Scan Resume
-                                </Link>
-                                <button
-                                    onClick={auth.signOut}
-                                    className="btn-ghost btn-sm"
-                                >
-                                    Log Out
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="flex items-center gap-2">
-                                <Link to="/auth" className="btn-ghost btn-sm hidden sm:block">
-                                    Log In
-                                </Link>
-                                <Link to="/auth" className="btn-primary btn-sm">
-                                    Get Started
-                                </Link>
-                            </div>
-                        )}
+                        {/* CTA Button */}
+                        <Link to="/upload" className="btn-primary btn-sm hidden sm:block">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                            </svg>
+                            Scan Resume
+                        </Link>
+                        <Link to="/upload" className="hidden md:block btn-primary btn-sm">
+                            Scan Resume
+                        </Link>
                     </div>
                 </div>
             </div>

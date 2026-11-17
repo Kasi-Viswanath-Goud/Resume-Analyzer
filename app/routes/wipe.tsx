@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { usePuterStore } from "~/lib/puter";
 import Navbar from "~/components/Navbar";
+import { Link } from "react-router";
 
 interface FSItem {
     id?: string;
@@ -10,7 +11,7 @@ interface FSItem {
 }
 
 const WipeApp = () => {
-    const { auth, isLoading, error, fs, kv } = usePuterStore();
+    const { fs, kv } = usePuterStore();
     const navigate = useNavigate();
     const [files, setFiles] = useState<FSItem[]>([]);
     const [isWiping, setIsWiping] = useState(false);
@@ -28,20 +29,12 @@ const WipeApp = () => {
     };
 
     useEffect(() => {
-        if (!isLoading && !auth.isAuthenticated) {
-            navigate("/auth?next=/wipe");
-        }
-    }, [isLoading, auth.isAuthenticated, navigate]);
-
-    useEffect(() => {
-        if (auth.isAuthenticated) {
-            loadFiles();
-        }
-    }, [auth.isAuthenticated]);
+        loadFiles();
+    }, []);
 
     const handleDelete = async () => {
         setIsWiping(true);
-        setStatusMessage('Deleting files and clearing database...');
+        setStatusMessage('Deleting all stored data...');
         setStatusType('info');
         try {
             if (files.length > 0) {
@@ -78,62 +71,16 @@ const WipeApp = () => {
         }
     };
 
-    if (isLoading) {
-        return (
-            <main className="min-h-screen bg-[var(--color-bg-secondary)] flex items-center justify-center">
-                <Navbar />
-                <div className="card-elevated p-8 text-center">
-                    <div className="w-12 h-12 rounded-xl bg-[var(--color-brand-100)] text-[var(--color-brand-600)] flex items-center justify-center mx-auto mb-4 animate-pulse-soft">
-                        <svg className="w-6 h-6 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-                        </svg>
-                    </div>
-                    <p className="text-[var(--color-text-secondary)]">Loading...</p>
-                </div>
-            </main>
-        );
-    }
-
-    if (error) {
-        return (
-            <main className="min-h-screen bg-[var(--color-bg-secondary)] flex items-center justify-center p-4">
-                <Navbar />
-                <div className="card-elevated p-8 max-w-md w-full text-center">
-                    <div className="w-16 h-16 rounded-2xl bg-[var(--color-error-50)] text-[var(--color-error-500)] flex items-center justify-center mx-auto mb-4">
-                        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                        </svg>
-                    </div>
-                    <h2 className="text-2xl font-semibold text-[var(--color-text-primary)] mb-2">Authentication Error</h2>
-                    <p className="text-[var(--color-text-secondary)] mb-6">{error}</p>
-                    <Link to="/auth" className="btn-primary w-full justify-center">
-                        Sign In Again
-                    </Link>
-                </div>
-            </main>
-        );
-    }
-
     return (
         <main className="min-h-screen bg-[var(--color-bg-secondary)]">
             <Navbar />
             <div className="pt-24 pb-12 px-4 md:px-8">
                 <div className="max-w-2xl mx-auto">
                     <div className="mb-8 animate-fade-in">
-                        <h1 className="text-3xl md:text-4xl font-display font-bold text-[var(--color-text-primary)] mb-2">Wipe App Data</h1>
+                        <h1 className="text-3xl md:text-4xl font-display font-bold text-[var(--color-text-primary)] mb-2">Clear Local Data</h1>
                         <p className="text-[var(--color-text-secondary)]">
-                            Permanently delete all stored resumes, files, and analysis data from your account.
+                            Permanently delete all stored resumes, files, and analysis data from your browser's local storage.
                         </p>
-                    </div>
-
-                    <div className="card mb-6 animate-fade-in stagger-1">
-                        <div className="flex items-center justify-between p-4 border-b border-[var(--color-border-light)] bg-[var(--color-bg-secondary)]">
-                            <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Account</h2>
-                            <div className="flex items-center gap-2 text-sm">
-                                <div className="w-2 h-2 rounded-full bg-[var(--color-accent-500)]"></div>
-                                <span className="font-medium text-[var(--color-text-primary)]">{auth.user?.username || 'Unknown'}</span>
-                            </div>
-                        </div>
                     </div>
 
                     {statusMessage && (
@@ -155,13 +102,13 @@ const WipeApp = () => {
 
                     <div className="card animate-fade-in stagger-2">
                         <div className="p-4 border-b border-[var(--color-border-light)] bg-[var(--color-bg-secondary)]">
-                            <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Files in Storage</h2>
+                            <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Files in Local Storage</h2>
                         </div>
                         <div className="p-4">
                             {files.length === 0 ? (
                                 <div className="text-center py-8">
                                     <img src="/icons/info.svg" alt="" className="w-12 h-12 mx-auto opacity-30 mb-3" />
-                                    <p className="text-[var(--color-text-tertiary)]">No files found in app storage.</p>
+                                    <p className="text-[var(--color-text-tertiary)]">No files found in local storage.</p>
                                 </div>
                             ) : (
                                 <div className="space-y-2 max-h-60 overflow-y-auto">
@@ -194,7 +141,7 @@ const WipeApp = () => {
                                 <div>
                                     <h3 className="font-semibold text-[var(--color-error-700)]">Danger Zone</h3>
                                     <p className="text-sm text-[var(--color-error-600)] mt-1">
-                                        This action will permanently delete ALL your resume files, analysis data, and KV store entries.
+                                        This action will permanently delete ALL your resume files, analysis data, and local storage entries.
                                         This cannot be undone.
                                     </p>
                                 </div>
@@ -216,7 +163,7 @@ const WipeApp = () => {
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v10m-5-10h10a2 2 0 012 2v2H3V9a2 2 0 012-2h2"/>
                                         </svg>
-                                        Wipe All App Data
+                                        Clear All Local Data
                                     </>
                                 )}
                             </button>
@@ -228,7 +175,7 @@ const WipeApp = () => {
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                             </svg>
-                            Back to Dashboard
+                            Back to Home
                         </Link>
                     </div>
                 </div>

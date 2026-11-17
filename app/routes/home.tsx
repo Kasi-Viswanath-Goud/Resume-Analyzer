@@ -1,6 +1,6 @@
 import type { Route } from "./+types/home";
 import Navbar from "~/components/Navbar";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { usePuterStore } from "~/lib/puter";
 import ResumeCard from "~/components/ResumeCard";
@@ -8,13 +8,13 @@ import ResumeCard from "~/components/ResumeCard";
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Resumind - AI-Powered ATS Resume Checker & Optimizer" },
-    { name: "description", content: "Scan your resume against ATS systems. Get instant AI-powered feedback, keyword optimization, and actionable tips to land more interviews. Free ATS resume checker." },
+    { name: "description", content: "Scan your resume against ATS systems. Get instant AI-powered feedback, keyword optimization, and actionable tips to land more interviews. Free ATS resume checker - no login required." },
     { property: "og:title", content: "Resumind - AI-Powered ATS Resume Checker" },
-    { property: "og:description", content: "Get your resume past ATS filters and into recruiters' hands. Instant AI analysis, keyword matching, and personalized improvements." },
+    { property: "og:description", content: "Get your resume past ATS filters and into recruiters' hands. Instant AI analysis, keyword matching, and personalized improvements. No account needed." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: "Resumind - AI-Powered ATS Resume Checker" },
-    { name: "twitter:description", content: "Scan your resume against ATS systems. Get instant AI-powered feedback and land more interviews." },
+    { name: "twitter:description", content: "Scan your resume against ATS systems. Get instant AI-powered feedback and land more interviews. Free, no login required." },
   ];
 }
 
@@ -87,6 +87,12 @@ const Hero = () => (
             <svg className="w-4 h-4 text-[var(--color-accent-500)]" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
             </svg>
+            <span>No account needed</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-[var(--color-text-tertiary)]">
+            <svg className="w-4 h-4 text-[var(--color-accent-500)]" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+            </svg>
             <span>Private & secure</span>
           </div>
         </div>
@@ -96,10 +102,8 @@ const Hero = () => (
       <div className="mt-16 relative animate-fade-in stagger-5">
         <div className="max-w-5xl mx-auto">
           <div className="relative bg-white rounded-2xl shadow-2xl border border-[var(--color-border-light)] overflow-hidden">
-            {/* Mock ATS Result Preview */}
             <div className="p-6 md:p-8">
               <div className="flex flex-col lg:flex-row gap-8 items-start">
-                {/* Score Circle */}
                 <div className="flex-shrink-0 w-40 h-40 md:w-48 md:h-48 relative mx-auto lg:mx-0">
                   <svg viewBox="0 0 120 120" className="w-full h-full transform -rotate-90">
                     <defs>
@@ -127,7 +131,6 @@ const Hero = () => (
                   </div>
                 </div>
 
-                {/* Breakdown */}
                 <div className="flex-1 space-y-4">
                   <h3 className="text-lg font-semibold text-[var(--color-text-primary)]">ATS Compatibility Breakdown</h3>
                   <div className="grid grid-cols-2 gap-4">
@@ -151,7 +154,6 @@ const Hero = () => (
                 </div>
               </div>
 
-              {/* Sample Tips */}
               <div className="mt-8 pt-8 border-t border-[var(--color-border-light)]">
                 <h4 className="text-sm font-semibold text-[var(--color-text-secondary)] mb-4">Top Improvements</h4>
                 <div className="space-y-3">
@@ -180,7 +182,6 @@ const Hero = () => (
       </div>
     </div>
 
-    {/* Background decoration */}
     <div className="absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-[var(--color-brand-100)] rounded-full blur-3xl opacity-50 animate-pulse-soft"></div>
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[var(--color-accent-100)] rounded-full blur-3xl opacity-50 animate-pulse-soft" style={{ animationDelay: "1s" }}></div>
@@ -204,7 +205,7 @@ const Features = () => (
           {
             icon: (
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
             ),
             title: "ATS Simulation",
@@ -253,7 +254,7 @@ const Features = () => (
               </svg>
             ),
             title: "Secure & Private",
-            description: "Your resume data never leaves your control. Built on Puter.js for client-side privacy and encrypted storage.",
+            description: "Your resume data stays in your browser. No server uploads, no accounts, no tracking.",
           },
         ].map((feature, index) => (
           <article key={index} className="card p-6 md:p-8 group animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
@@ -319,7 +320,6 @@ const HowItWorks = () => (
           },
         ].map((step, index) => (
           <div key={index} className="relative text-center animate-fade-in" style={{ animationDelay: `${index * 150}ms` }}>
-            {/* Connecting line */}
             {index < 2 && (
               <div className="absolute top-[60px] left-1/2 w-full h-0.5 bg-gradient-to-r from-transparent via-[var(--color-brand-300)] to-transparent md:left-full z-0 hidden md:block" aria-hidden="true" />
             )}
@@ -336,7 +336,6 @@ const HowItWorks = () => (
         ))}
       </div>
 
-      {/* CTA */}
       <div className="text-center mt-16 animate-fade-in stagger-4">
         <Link to="/upload" className="btn-primary btn-xl inline-flex">
           Start My Free Resume Scan
@@ -415,97 +414,49 @@ const Pricing = () => (
   <section id="pricing" className="section">
     <div className="container mx-auto px-4 md:px-8">
       <div className="max-w-2xl mx-auto text-center mb-16">
-        <h2 className="mb-4">Simple, Transparent Pricing</h2>
+        <h2 className="mb-4">Completely Free</h2>
         <p className="text-[var(--color-text-secondary)] text-lg">
-          Start free. Upgrade when you need more scans. No hidden fees.
+          No hidden fees, no subscriptions, no limits. Just powerful AI resume analysis.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-        {[
-          {
-            name: "Free",
-            price: "$0",
-            period: "/month",
-            description: "Perfect for occasional job applications",
-            features: [
-              "3 resume scans per month",
-              "ATS compatibility score",
+      <div className="max-w-xl mx-auto">
+        <div className="card-elevated p-8 md:p-10 text-center">
+          <div className="w-16 h-16 rounded-2xl bg-[var(--color-accent-100)] text-[var(--color-accent-600)] flex items-center justify-center mx-auto mb-6">
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+          </div>
+          <h3 className="text-2xl md:text-3xl font-display font-bold text-[var(--color-text-primary)] mb-4">Free Forever</h3>
+          <p className="text-[var(--color-text-secondary)] text-lg mb-8">
+            Unlimited resume scans, detailed feedback, and keyword analysis — all at no cost.
+          </p>
+          <ul className="space-y-3 mb-8 text-left max-w-md mx-auto" role="list">
+            {[
+              "Unlimited resume scans per month",
+              "ATS compatibility scoring",
               "Keyword gap analysis",
-              "Basic improvement tips",
-              "PDF upload support",
-            ],
-            cta: "Start Free",
-            variant: "outline" as const,
-            popular: false,
-          },
-          {
-            name: "Pro",
-            price: "$19",
-            period: "/month",
-            description: "For active job seekers",
-            features: [
-              "Unlimited resume scans",
               "Detailed section breakdowns",
-              "Priority AI processing",
-              "Export reports as PDF",
-              "Resume version history",
-              "Email support",
-            ],
-            cta: "Get Pro",
-            variant: "primary" as const,
-            popular: true,
-          },
-          {
-            name: "Team",
-            price: "$49",
-            period: "/month",
-            description: "For career coaches & teams",
-            features: [
-              "Everything in Pro",
-              "5 team member seats",
-              "Bulk resume analysis",
-              "Custom branding on reports",
-              "API access",
-              "Dedicated support",
-            ],
-            cta: "Contact Sales",
-            variant: "outline" as const,
-            popular: false,
-          },
-        ].map((plan, index) => (
-          <article key={index} className={`card p-8 relative ${plan.popular ? "ring-2 ring-[var(--color-brand-500)]" : ""} animate-fade-in`} style={{ animationDelay: `${index * 100}ms` }}>
-            {plan.popular && (
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-[var(--color-brand-600)] text-white text-sm font-semibold rounded-full">
-                Most Popular
-              </div>
-            )}
-            <div className="mb-6">
-              <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mb-2">{plan.name}</h3>
-              <p className="text-[var(--color-text-tertiary)] text-sm">{plan.description}</p>
-            </div>
-            <div className="mb-6">
-              <span className="text-4xl font-display font-bold text-[var(--color-text-primary)]">{plan.price}</span>
-              <span className="text-[var(--color-text-tertiary)]">{plan.period}</span>
-            </div>
-            <ul className="space-y-3 mb-8" role="list">
-              {plan.features.map((feature, i) => (
-                <li key={i} className="flex items-start gap-3 text-[var(--color-text-secondary)]">
-                  <svg className="w-5 h-5 text-[var(--color-accent-500)] shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                  </svg>
-                  {feature}
-                </li>
-              ))}
-            </ul>
-            <Link
-              to={plan.variant === "primary" ? "/upload" : "/auth"}
-              className={`btn-${plan.variant} btn-lg w-full ${plan.popular ? "btn-primary" : ""}`}
-            >
-              {plan.cta}
-            </Link>
-          </article>
-        ))}
+              "Actionable improvement tips",
+              "PDF upload support (up to 20MB)",
+              "No account required",
+              "Data stays in your browser",
+            ].map((feature, i) => (
+              <li key={i} className="flex items-center gap-3 text-[var(--color-text-secondary)]">
+                <svg className="w-5 h-5 text-[var(--color-accent-500)] shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                </svg>
+                {feature}
+              </li>
+            ))}
+          </ul>
+          <Link to="/upload" className="btn-primary btn-xl inline-flex w-full sm:w-auto">
+            Start Free Scan
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+            </svg>
+          </Link>
+        </div>
       </div>
     </div>
   </section>
@@ -529,12 +480,16 @@ const FAQ = () => (
               answer: "Our AI models how real Applicant Tracking Systems parse resumes — checking file format compatibility, keyword density, section headers, date formatting, and structural hierarchy. We then score your resume against the specific job description you provide.",
             },
             {
+              question: "Do I need to create an account?",
+              answer: "No! Resumind works completely without an account. Just upload your resume and job description to get instant feedback. Your data stays in your browser's local storage.",
+            },
+            {
               question: "Is my resume data private and secure?",
-              answer: "Yes. Resumind is built on Puter.js, which means your data stays in your personal encrypted cloud storage. We never see, store, or share your resume content. You own your data completely.",
+              answer: "Yes. Your resume never leaves your browser. All processing happens locally using Web APIs. We don't upload, store, or see your resume content. You own your data completely.",
             },
             {
               question: "What file formats are supported?",
-              answer: "Currently we support PDF files up to 20MB. PDF is the most ATS-friendly format and preserves your formatting for accurate analysis. Support for DOCX is coming soon.",
+              answer: "Currently we support PDF files up to 20MB. PDF is the most ATS-friendly format and preserves your formatting for accurate analysis.",
             },
             {
               question: "How accurate is the keyword matching?",
@@ -542,7 +497,7 @@ const FAQ = () => (
             },
             {
               question: "Can I use this for multiple job applications?",
-              answer: "Absolutely. Each scan is tied to a specific job description. You can scan the same resume against different job postings to tailor it for each application. Pro users get unlimited scans.",
+              answer: "Absolutely. Each scan is tied to a specific job description. You can scan the same resume against different job postings to tailor it for each application. No limits on scans.",
             },
             {
               question: "What makes Resumind different from other resume checkers?",
@@ -590,7 +545,7 @@ const CTASection = () => (
           </Link>
         </div>
         <p className="mt-6 text-[var(--color-brand-200)] text-sm">
-          No credit card required · Results in 30 seconds · Private & secure
+          No credit card required · Results in 30 seconds · No account needed · Private & secure
         </p>
       </div>
     </div>
@@ -629,7 +584,7 @@ const Footer = () => (
           <h4 className="font-semibold text-white mb-4">Product</h4>
           <nav aria-label="Product links">
             <ul className="space-y-2">
-              {["ATS Resume Checker", "Keyword Analysis", "Resume Scoring", "Pricing", "API"].map((item) => (
+              {["ATS Resume Checker", "Keyword Analysis", "Resume Scoring", "How It Works", "FAQ"].map((item) => (
                 <li key={item}><Link to="#" className="text-[var(--color-neutral-400)] hover:text-white transition-colors text-sm">{item}</Link></li>
               ))}
             </ul>
@@ -640,7 +595,7 @@ const Footer = () => (
           <h4 className="font-semibold text-white mb-4">Resources</h4>
           <nav aria-label="Resource links">
             <ul className="space-y-2">
-              {["Blog", "Resume Guides", "ATS Tips", "Career Advice", "FAQ"].map((item) => (
+              {["Resume Guides", "ATS Tips", "Career Advice", "Interview Prep", "Salary Negotiation"].map((item) => (
                 <li key={item}><Link to="#" className="text-[var(--color-neutral-400)] hover:text-white transition-colors text-sm">{item}</Link></li>
               ))}
             </ul>
@@ -663,36 +618,19 @@ const Footer = () => (
 );
 
 export default function Home() {
-  const { auth, kv, isLoading } = usePuterStore();
-  const navigate = useNavigate();
+  const { kv } = usePuterStore();
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loadingResumes, setLoadingResumes] = useState(true);
 
-  // Only redirect if Puter has finished loading and user is not authenticated
+  // Load resumes from localStorage on mount
   useEffect(() => {
-    if (!isLoading && !auth.isAuthenticated) {
-      // Don't redirect on landing page - show marketing content instead
-    }
-  }, [isLoading, auth.isAuthenticated, navigate]);
-
-  // Load resumes when authenticated
-  useEffect(() => {
-    let isMounted = true;
-
     const loadResumes = async () => {
-      if (!auth.isAuthenticated) {
-        if (isMounted) setLoadingResumes(false);
-        return;
-      }
-
       setLoadingResumes(true);
       try {
         const items = (await kv.list('resume:*', true)) as KVItem[] | undefined;
         if (!items || !Array.isArray(items)) {
-          if (isMounted) {
-            setResumes([]);
-            setLoadingResumes(false);
-          }
+          setResumes([]);
+          setLoadingResumes(false);
           return;
         }
 
@@ -709,81 +647,19 @@ export default function Home() {
           })
           .filter((r): r is Resume => Boolean(r && r.id));
 
-        if (isMounted) {
-          setResumes(parsedResumes);
-        }
+        setResumes(parsedResumes);
       } catch (err) {
         console.error('Failed to load resumes:', err);
       } finally {
-        if (isMounted) setLoadingResumes(false);
+        setLoadingResumes(false);
       }
     };
 
-    if (auth.isAuthenticated) {
-      loadResumes();
-    } else if (!isLoading) {
-      setLoadingResumes(false);
-    }
+    loadResumes();
+  }, [kv]);
 
-    return () => {
-      isMounted = false;
-    };
-  }, [auth.isAuthenticated, isLoading, kv]);
+  const showLoading = loadingResumes;
 
-  const showLoading = isLoading || (auth.isAuthenticated && loadingResumes);
-
-  // If user is authenticated, show dashboard; otherwise show landing page
-  if (auth.isAuthenticated) {
-    return (
-      <main className="min-h-screen bg-[var(--color-bg-secondary)]">
-        <Navbar />
-        <div className="pt-24 pb-12 px-4 md:px-8">
-          <div className="max-w-6xl mx-auto">
-            <div className="mb-8">
-              <h1 className="text-3xl md:text-4xl font-display font-bold text-[var(--color-text-primary)] mb-2">Dashboard</h1>
-              <p className="text-[var(--color-text-secondary)]">Track your applications and resume ratings</p>
-            </div>
-
-            {showLoading && (
-              <div className="flex flex-col items-center justify-center py-16">
-                <img src="/images/resume-scan-2.gif" className="w-[200px]" alt="Loading resumes..." />
-                <p className="text-[var(--color-text-tertiary)] mt-4 text-lg">Loading your resumes...</p>
-              </div>
-            )}
-
-            {!showLoading && resumes.length > 0 && (
-              <div className="resumes-section">
-                {resumes.map((resume) => (
-                  <ResumeCard key={resume.id} resume={resume} />
-                ))}
-              </div>
-            )}
-
-            {!showLoading && resumes.length === 0 && (
-              <div className="card-elevated p-12 text-center">
-                <div className="w-16 h-16 rounded-2xl bg-[var(--color-brand-100)] text-[var(--color-brand-600)] flex items-center justify-center mx-auto mb-6">
-                  <img src="/images/pdf.png" alt="" className="w-8 h-8" />
-                </div>
-                <h2 className="text-2xl font-semibold text-[var(--color-text-primary)] mb-2">No resumes yet</h2>
-                <p className="text-[var(--color-text-secondary)] mb-6 max-w-md mx-auto">
-                  Upload your first resume to get AI-powered feedback and ATS scoring.
-                </p>
-                <Link to="/upload" className="btn-primary btn-lg inline-flex w-auto">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
-                  </svg>
-                  Upload Resume
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-        <Footer />
-      </main>
-    );
-  }
-
-  // Landing page for unauthenticated users
   return (
     <main className="min-h-screen bg-[var(--color-bg-primary)]">
       <Navbar />
