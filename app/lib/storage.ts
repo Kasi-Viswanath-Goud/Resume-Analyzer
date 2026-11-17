@@ -1,7 +1,7 @@
 // Simple local storage wrapper to replace Puter.js functionality
 // This allows the app to work without authentication
 
-interface KVItem {
+export interface KVItem {
   key: string;
   value: string;
 }
@@ -271,7 +271,7 @@ const store: PuterStore = {
   },
 };
 
-export const usePuterStore = (): PuterStore => store;
+export const useStorage = (): PuterStore => store;
 
 // For non-hook usage
-export const puter = store;
+export const storage = store;

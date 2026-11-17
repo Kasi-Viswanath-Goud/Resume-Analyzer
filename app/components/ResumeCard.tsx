@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import ScoreCircle from "~/components/ScoreCircle";
 import { useEffect, useState } from "react";
-import { usePuterStore } from "~/lib/puter";
+import { useStorage } from "~/lib/storage";
 import { cn } from "~/lib/utils";
 
 const ResumeCard = ({
@@ -9,7 +9,7 @@ const ResumeCard = ({
 }: {
     resume: Resume;
 }) => {
-    const { fs } = usePuterStore();
+    const { fs } = useStorage();
     const [resumeUrl, setResumeUrl] = useState('');
 
     useEffect(() => {

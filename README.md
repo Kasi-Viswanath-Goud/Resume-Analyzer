@@ -9,7 +9,6 @@
     <img alt="Static Badge" src="https://img.shields.io/badge/React-4c84f3?style=for-the-badge&logo=react&logoColor=white">
         <img src="https://img.shields.io/badge/-Tailwind-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" />
         <img src="https://img.shields.io/badge/-TypeScript-black?style=for-the-badge&logoColor=white&logo=typescript&color=3178C6" alt="TypeScript" />
-    <img alt="Static Badge" src="https://img.shields.io/badge/Puter.js-181758?style=for-the-badge&logoColor=white">
   </div>
 
   <h3 align="center">AI Resume Analyzer</h3>
@@ -38,7 +37,7 @@ If you prefer visual learning, this is the perfect resource for you. Follow our 
 
 ## <a name="introduction">✨ Introduction</a>
 
-Build an AI-powered Resume Analyzer with React, React Router, and Puter.js! Implement seamless auth, upload and store resumes, and match candidates to jobs using smart AI evaluations. Get custom feedback and ATS scores tailored to each listing—all wrapped in a clean, reusable UI.
+Build an AI-powered **ATS Resume Checker** with React, React Router v7, and Tailwind CSS! Upload your resume, paste a job description, and get instant AI-powered feedback with ATS scores, keyword gaps, and actionable improvements — **completely free, no login required, and your data never leaves your browser.**
 
 If you're getting started and need assistance or face any bugs, join our active Discord community with over **50k+** members. It's a place where people help each other out.
 
@@ -46,39 +45,36 @@ If you're getting started and need assistance or face any bugs, join our active 
 
 ## <a name="tech-stack">⚙️ Tech Stack</a>
 
-- **[React](https://react.dev/)** is a popular open‑source JavaScript library for building user interfaces using reusable components and a virtual DOM, enabling efficient, dynamic single-page and native apps.
+- **[React 19](https://react.dev/)** — Modern React with concurrent features and Server Components support
+- **[React Router v7](https://reactrouter.com/)** — File-based routing, data loaders/actions, SSR, and type-safe routes
+- **[Tailwind CSS v4](https://tailwindcss.com/)** — Utility-first CSS with CSS-variable theming and zero-config setup
+- **[TypeScript](https://www.typescriptlang.org/)** — Strict type safety across the entire codebase
+- **[Vite 6](https://vite.dev/)** — Lightning-fast dev server and optimized production builds
+- **[Zustand](https://github.com/pmndrs/zustand)** — Minimal, hook-based global state (used for UI state only)
+- **[pdfjs-dist](https://github.com/mozilla/pdf.js)** — Client-side PDF parsing and preview generation
+- **[react-dropzone](https://react-dropzone.js.org/)** — Accessible drag-and-drop file uploads
 
-- **[React Router v7](https://reactrouter.com/)** is the go‑to routing library for React apps, offering nested routes, data loaders/actions, error boundaries, code splitting, and SSR support—all with a smooth upgrade path from v6.
-
-- **[Puter.com](https://jsm.dev/resumind-puter)** is an advanced, open-source internet operating system designed to be feature-rich, exceptionally fast, and highly extensible. Puter can be used as: A privacy-first personal cloud to keep all your files, apps, and games in one secure place, accessible from anywhere at any time.
-
-- **[Puter.js](https://jsm.dev/resumind-puterjs)** is a tiny client‑side SDK that adds serverless auth, storage, database, and AI (GPT, Claude, DALL·E, OCR…) straight into your browser app—no backend needed and costs borne by users.
-
-- **[Tailwind CSS](https://tailwindcss.com/)** is a utility-first CSS framework that allows developers to design custom user interfaces by applying low-level utility classes directly in HTML, streamlining the design process.
-
-- **[TypeScript](https://www.typescriptlang.org/)** is a superset of JavaScript that adds static typing, providing better tooling, code quality, and error detection for developers, making it ideal for building large-scale applications.
-
-- **[Vite](https://vite.dev/)** is a fast build tool and dev server using native ES modules for instant startup, hot‑module replacement, and Rollup‑powered production builds—perfect for modern web development.
-
-- **[Zustand](https://github.com/pmndrs/zustand)** is a minimal, hook-based state management library for React. It lets you manage global state with zero boilerplate, no context providers, and excellent performance through selective state subscriptions.
+**No backend, no database, no auth provider** — everything runs client-side via `localStorage`.
 
 ## <a name="features">🔋 Features</a>
 
-👉 **Easy & convenient auth**: Handle authentication entirely in the browser using Puter.js—no backend or setup required.
+👉 **Zero-auth flow**: Visit → Upload → Analyze → Results — no accounts, no redirects, no friction
 
-👉 **Resume upload & storage**: Let users upload and store all their resumes in one place, safely and reliably.
+👉 **Privacy-first**: Your resume never leaves your browser; all storage is local `localStorage`
 
-👉 **AI resume matching**: Provide a job listing and get an ATS score with custom feedback tailored to each resume.
+👉 **AI resume matching** (mock): Paste a job description, get an ATS score with section-by-section feedback
 
-👉 **Reusable, modern UI**: Built with clean, consistent components for a great-looking and maintainable interface.
+👉 **PDF upload & preview**: Drag-and-drop PDF, instant first-page preview, secure local processing
 
-👉 **Code Reusability**: Leverage reusable components and a modular codebase for efficient development.
+👉 **Detailed scoring**: Overall + ATS + Tone & Style + Content + Structure + Skills breakdowns
 
-👉 **Cross-Device Compatibility**: Fully responsive design that works seamlessly across all devices.
+👉 **Actionable tips**: Every score comes with specific, prioritized improvements and explanations
 
-👉 **Modern UI/UX**: Clean, responsive design built with Tailwind CSS and shadcn/ui for a sleek user experience.
+👉 **Persistent across sessions**: Data survives browser restarts; `/wipe` page to clear everything
 
-And many more, including code architecture and reusability.
+👉 **Modern, accessible UI**: Tailwind v4, semantic HTML, ARIA labels, keyboard navigation, reduced-motion support
+
+👉 **Responsive design**: Works beautifully on mobile, tablet, and desktop
 
 ## <a name="quick-start">🤸 Quick Start</a>
 

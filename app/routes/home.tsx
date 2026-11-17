@@ -2,7 +2,7 @@ import type { Route } from "./+types/home";
 import Navbar from "~/components/Navbar";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
-import { usePuterStore } from "~/lib/puter";
+import { useStorage, type KVItem } from "~/lib/storage";
 import ResumeCard from "~/components/ResumeCard";
 
 export function meta({}: Route.MetaArgs) {
@@ -618,7 +618,7 @@ const Footer = () => (
 );
 
 export default function Home() {
-  const { kv } = usePuterStore();
+  const { kv } = useStorage();
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loadingResumes, setLoadingResumes] = useState(true);
 

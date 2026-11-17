@@ -1,6 +1,6 @@
 import { Link, useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
-import { usePuterStore } from "~/lib/puter";
+import { useStorage } from "~/lib/storage";
 import Summary from "~/components/Summary";
 import ATS from "~/components/ATS";
 import Details from "~/components/Details";
@@ -12,7 +12,7 @@ export const meta = () => [
 ];
 
 const Resume = () => {
-    const { fs, kv } = usePuterStore();
+    const { fs, kv } = useStorage();
     const { id } = useParams();
     const [imageUrl, setImageUrl] = useState('');
     const [resumeUrl, setResumeUrl] = useState('');

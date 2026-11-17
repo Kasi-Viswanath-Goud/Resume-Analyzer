@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { usePuterStore } from "~/lib/puter";
+import { useStorage } from "~/lib/storage";
 import Navbar from "~/components/Navbar";
 import { Link } from "react-router";
 
@@ -11,7 +11,7 @@ interface FSItem {
 }
 
 const WipeApp = () => {
-    const { fs, kv } = usePuterStore();
+    const { fs, kv } = useStorage();
     const navigate = useNavigate();
     const [files, setFiles] = useState<FSItem[]>([]);
     const [isWiping, setIsWiping] = useState(false);

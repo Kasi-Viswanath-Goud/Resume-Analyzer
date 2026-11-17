@@ -1,7 +1,7 @@
 import { type FormEvent, useState, useEffect } from 'react';
 import Navbar from '~/components/Navbar';
 import FileUploader from '~/components/FileUploader';
-import { usePuterStore } from '~/lib/puter';
+import { useStorage } from '~/lib/storage';
 import { useNavigate } from 'react-router';
 import { convertPdfToImage } from '~/lib/pdf2img';
 import { generateUUID } from '~/lib/utils';
@@ -30,7 +30,7 @@ function parseFeedbackJson(rawText: string): Feedback {
 }
 
 const Upload = () => {
-    const { fs, ai, kv } = usePuterStore();
+    const { fs, ai, kv } = useStorage();
     const navigate = useNavigate();
     const [isProcessing, setIsProcessing] = useState(false);
     const [statusText, setStatusText] = useState('');
