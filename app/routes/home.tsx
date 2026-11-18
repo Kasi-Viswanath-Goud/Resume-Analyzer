@@ -7,13 +7,13 @@ import ResumeCard from "~/components/ResumeCard";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Resumind - AI-Powered ATS Resume Checker & Optimizer" },
+    { title: "ResuScore - AI-Powered ATS Resume Checker & Optimizer" },
     { name: "description", content: "Scan your resume against ATS systems. Get instant AI-powered feedback, keyword optimization, and actionable tips to land more interviews. Free ATS resume checker - no login required." },
-    { property: "og:title", content: "Resumind - AI-Powered ATS Resume Checker" },
+    { property: "og:title", content: "ResuScore - AI-Powered ATS Resume Checker" },
     { property: "og:description", content: "Get your resume past ATS filters and into recruiters' hands. Instant AI analysis, keyword matching, and personalized improvements. No account needed." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: "Resumind - AI-Powered ATS Resume Checker" },
+    { name: "twitter:title", content: "ResuScore - AI-Powered ATS Resume Checker" },
     { name: "twitter:description", content: "Scan your resume against ATS systems. Get instant AI-powered feedback and land more interviews. Free, no login required." },
   ];
 }
@@ -45,19 +45,24 @@ const Hero = () => (
         </div>
 
         {/* Headline */}
-        <h1 className="text-gradient-hero mb-6 animate-slide-up stagger-1">
+        <h1 className="text-gradient-hero mb-4 animate-slide-up stagger-1">
           Get Past ATS Filters &<br />
           <span className="text-gradient-brand">Land More Interviews</span>
         </h1>
 
+        {/* Hero Sub-headline */}
+        <h2 className="text-xl md:text-2xl font-semibold text-[var(--color-text-primary)] mb-6 animate-slide-up stagger-2 max-w-2xl mx-auto">
+          Missing Keywords Costing You Interviews? Find Out in 30 Seconds
+        </h2>
+
         {/* Subheadline */}
-        <p className="text-lg md:text-xl text-[var(--color-text-secondary)] max-w-2xl mx-auto mb-10 animate-slide-up stagger-2">
+        <p className="text-lg md:text-xl text-[var(--color-text-secondary)] max-w-2xl mx-auto mb-10 animate-slide-up stagger-3">
           Upload your resume and job description. Our AI simulates real ATS scans, identifies missing keywords,
           and gives you a personalized roadmap to optimize your resume for every application.
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 animate-slide-up stagger-3">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 animate-slide-up stagger-4">
           <Link to="/upload" className="btn-primary btn-lg w-full sm:w-auto group">
             <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
@@ -70,7 +75,7 @@ const Hero = () => (
         </div>
 
         {/* Trust Indicators */}
-        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-sm animate-fade-in stagger-4">
+        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-sm animate-fade-in stagger-5">
           <div className="flex items-center gap-1.5 text-[var(--color-text-tertiary)]">
             <svg className="w-4 h-4 text-[var(--color-accent-500)]" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
@@ -99,7 +104,7 @@ const Hero = () => (
       </div>
 
       {/* Hero Visual */}
-      <div className="mt-16 relative animate-fade-in stagger-5">
+      <div className="mt-16 relative animate-fade-in stagger-6">
         <div className="max-w-5xl mx-auto">
           <div className="relative bg-white rounded-2xl shadow-2xl border border-[var(--color-border-light)] overflow-hidden">
             <div className="p-6 md:p-8">
@@ -354,14 +359,14 @@ const Testimonials = () => (
       <div className="max-w-2xl mx-auto text-center mb-16">
         <h2 className="mb-4">Trusted by Thousands of Job Seekers</h2>
         <p className="text-[var(--color-text-secondary)] text-lg">
-          See how Resumind helped real people land interviews at top companies.
+          See how ResuScore helped real people land interviews at top companies.
         </p>
       </div>
 
       <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
         {[
           {
-            quote: "Resumind caught 12 missing keywords from the job description that I never would have noticed. My ATS score jumped from 64 to 91, and I got the interview at Stripe.",
+            quote: "ResuScore caught 12 missing keywords from the job description that I never would have noticed. My ATS score jumped from 64 to 91, and I got the interview at Stripe.",
             author: "Sarah Chen",
             role: "Frontend Engineer",
             company: "Stripe",
@@ -375,7 +380,7 @@ const Testimonials = () => (
             score: "88/100",
           },
           {
-            quote: "As a career switcher, I didn't know which keywords mattered. Resumind's skill gap analysis was exactly what I needed to translate my experience.",
+            quote: "As a career switcher, I didn't know which keywords mattered. ResuScore's skill gap analysis was exactly what I needed to translate my experience.",
             author: "Emily Rodriguez",
             role: "Data Analyst",
             company: "Shopify",
@@ -468,7 +473,7 @@ const FAQ = () => (
       <div className="max-w-2xl mx-auto text-center mb-16">
         <h2 className="mb-4">Frequently Asked Questions</h2>
         <p className="text-[var(--color-text-secondary)] text-lg">
-          Everything you need to know about Resumind.
+          Everything you need to know about ResuScore.
         </p>
       </div>
 
@@ -481,7 +486,7 @@ const FAQ = () => (
             },
             {
               question: "Do I need to create an account?",
-              answer: "No! Resumind works completely without an account. Just upload your resume and job description to get instant feedback. Your data stays in your browser's local storage.",
+              answer: "No! ResuScore works completely without an account. Just upload your resume and job description to get instant feedback. Your data stays in your browser's local storage.",
             },
             {
               question: "Is my resume data private and secure?",
@@ -500,8 +505,8 @@ const FAQ = () => (
               answer: "Absolutely. Each scan is tied to a specific job description. You can scan the same resume against different job postings to tailor it for each application. No limits on scans.",
             },
             {
-              question: "What makes Resumind different from other resume checkers?",
-              answer: "Most tools only check formatting. Resumind combines ATS simulation + semantic keyword analysis + section-by-section scoring + personalized explanations. We tell you not just what's wrong, but why it matters and how to fix it.",
+              question: "What makes ResuScore different from other resume checkers?",
+              answer: "Most tools only check formatting. ResuScore combines ATS simulation + semantic keyword analysis + section-by-section scoring + personalized explanations. We tell you not just what's wrong, but why it matters and how to fix it.",
             },
           ].map((faq, index) => (
             <div key={index} className="card overflow-hidden animate-fade-in" style={{ animationDelay: `${index * 50}ms` }}>
@@ -557,12 +562,12 @@ const Footer = () => (
     <div className="container mx-auto px-4 md:px-8 py-12 md:py-16">
       <div className="grid md:grid-cols-4 gap-8 md:gap-12 mb-12">
         <div className="md:col-span-2">
-          <Link to="/" className="flex items-center gap-2 text-white hover:text-[var(--color-brand-300)] transition-colors mb-4" aria-label="Resumind Home">
+          <Link to="/" className="flex items-center gap-2 text-white hover:text-[var(--color-brand-300)] transition-colors mb-4" aria-label="ResuScore Home">
             <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <rect width="32" height="32" rx="8" fill="currentColor"/>
               <path d="M8 12h16M8 16h12M8 20h10" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
             </svg>
-            <span className="font-display font-bold text-xl">Resumind</span>
+            <span className="font-display font-bold text-xl">ResuScore</span>
           </Link>
           <p className="max-w-xs text-[var(--color-neutral-400)] mb-6">
             AI-powered ATS resume checker helping job seekers get past automated filters and land more interviews.
@@ -605,7 +610,7 @@ const Footer = () => (
 
       <div className="border-t border-[var(--color-neutral-800)] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
         <p className="text-[var(--color-neutral-500)] text-sm">
-          © {new Date().getFullYear()} Resumind. All rights reserved.
+          © {new Date().getFullYear()} ResuScore. All rights reserved.
         </p>
         <nav aria-label="Legal links" className="flex items-center gap-6">
           {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((item) => (

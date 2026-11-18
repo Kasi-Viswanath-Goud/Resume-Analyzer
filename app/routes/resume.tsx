@@ -7,7 +7,7 @@ import Details from "~/components/Details";
 import Navbar from "~/components/Navbar";
 
 export const meta = () => [
-    { title: 'Resumind | Resume Analysis Results' },
+    { title: 'ResuScore | Resume Analysis Results' },
     { name: 'description', content: 'Detailed overview of your resume analysis with ATS score, keyword matching, and improvement recommendations.' },
 ];
 
