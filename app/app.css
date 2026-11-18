@@ -405,6 +405,54 @@
     50% { opacity: 0.6; }
   }
 
+  /* Brand logo animation */
+  .logo-pulse-group {
+    animation: logoPulse 3.6s ease-in-out infinite;
+  }
+
+  .logo-halo {
+    opacity: 0;
+    animation: logoHalo 3.6s ease-in-out infinite;
+  }
+
+  .logo-pulse-text {
+    animation: logoTextPulse 3.6s ease-in-out infinite;
+  }
+
+  @keyframes logoPulse {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 4px 10px rgba(79, 70, 229, 0.18)); }
+    50% { transform: scale(1.035); filter: drop-shadow(0 10px 22px rgba(79, 70, 229, 0.38)); }
+  }
+
+  @keyframes logoHalo {
+    0%, 100% { opacity: 0; transform: scale(0.92); }
+    50% { opacity: 0.35; transform: scale(1.12); }
+  }
+
+  @keyframes logoTextPulse {
+    0%, 100% { opacity: 1; letter-spacing: 0.22em; }
+    50% { opacity: 0.72; letter-spacing: 0.25em; }
+  }
+
+  /* Nudge arrow — hints "tap here" without saying it */
+  .animate-nudge {
+    animation: nudge 1.8s ease-in-out infinite;
+  }
+
+  @keyframes nudge {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(4px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logo-pulse-group,
+    .logo-halo,
+    .logo-pulse-text,
+    .animate-nudge {
+      animation: none;
+    }
+  }
+
   /* Stagger animations */
   .stagger-1 { animation-delay: 0ms; }
   .stagger-2 { animation-delay: 100ms; }

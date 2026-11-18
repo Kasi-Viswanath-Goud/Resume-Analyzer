@@ -1,11 +1,11 @@
 import { Link, useLocation } from "react-router";
+import { LogoMark } from "~/components/Logo";
 
 const Navbar = () => {
     const location = useLocation();
 
     const navLinks = [
         { href: "/", label: "Features" },
-        { href: "/#faq", label: "FAQ" },
     ];
 
     return (
@@ -13,12 +13,9 @@ const Navbar = () => {
             <div className="container mx-auto px-4 md:px-8">
                 <div className="flex items-center justify-between h-16 md:h-18">
                     {/* Logo */}
-                    <Link to="/" className="flex items-center gap-2 text-[var(--color-brand-700)] hover:text-[var(--color-brand-600)] transition-colors" aria-label="ResuScore Home">
-                        <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                            <rect width="32" height="32" rx="8" fill="currentColor"/>
-                            <path d="M8 12h16M8 16h12M8 20h10" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
-                        </svg>
-                        <span className="font-display font-bold text-xl md:text-2xl">ResuScore</span>
+                    <Link to="/" className="flex items-center gap-2.5 text-[var(--color-brand-700)] hover:text-[var(--color-brand-600)] transition-colors" aria-label="ResuScore Home">
+                        <LogoMark className="h-9 w-9" />
+                        <span className="font-display font-black uppercase tracking-[0.14em] text-lg md:text-xl">ResuScore</span>
                     </Link>
 
                     {/* Desktop Navigation */}

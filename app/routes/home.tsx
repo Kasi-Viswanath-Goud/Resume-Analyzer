@@ -1,5 +1,6 @@
-import type { Route } from "./+types/home";
+﻿import type { Route } from "./+types/home";
 import Navbar from "~/components/Navbar";
+import Logo from "~/components/Logo";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { useStorage, type KVItem } from "~/lib/storage";
@@ -35,19 +36,36 @@ const Hero = () => (
   <section className="relative pt-20 md:pt-28 lg:pt-36 pb-16 md:pb-24 overflow-hidden">
     <div className="container mx-auto px-4 md:px-8 relative z-10">
       <div className="max-w-4xl mx-auto text-center">
+        {/* Animated brand logo */}
+        <div className="flex justify-center mb-8 animate-scale-in">
+          <Logo markClassName="h-20 w-20 md:h-24 md:w-24" wordmarkClassName="text-xl md:text-2xl" />
+        </div>
+
         {/* Hero Headline */}
-        <h1 className="text-gradient-hero mb-6 animate-slide-up max-w-2xl mx-auto">
+        <h1 className="text-gradient-hero mb-6 animate-slide-up stagger-1 max-w-2xl mx-auto">
           Missing Keywords Costing You Interviews? Find Out in 30 Seconds
         </h1>
 
         {/* CTA Button */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 animate-slide-up">
+        <div className="flex flex-col items-center justify-center mb-12 animate-slide-up stagger-2">
           <Link to="/upload" className="btn-primary btn-lg w-full sm:w-auto group">
-            <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
             </svg>
             Know Your CV Score
+            <svg
+              className="w-5 h-5 animate-nudge transition-transform group-hover:translate-x-1.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+            </svg>
           </Link>
+          <p className="mt-4 text-sm md:text-base text-[var(--color-text-secondary)]">
+            Upload your Resume here
+          </p>
         </div>
 
         {/* Trust Indicators */}
@@ -329,131 +347,6 @@ const HowItWorks = () => (
   </section>
 );
 
-const Testimonials = () => (
-  <section className="section bg-[var(--color-bg-secondary)]">
-    <div className="container mx-auto px-4 md:px-8">
-      <div className="max-w-2xl mx-auto text-center mb-16">
-        <h2 className="mb-4">Trusted by Thousands of Job Seekers</h2>
-        <p className="text-[var(--color-text-secondary)] text-lg">
-          See how ResuScore helped real people land interviews at top companies.
-        </p>
-      </div>
-
-      <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-        {[
-          {
-            quote: "ResuScore caught 12 missing keywords from the job description that I never would have noticed. My ATS score jumped from 64 to 91, and I got the interview at Stripe.",
-            author: "Sarah Chen",
-            role: "Frontend Engineer",
-            company: "Stripe",
-            score: "91/100",
-          },
-          {
-            quote: "The structure analysis showed me my resume had the right experience but in the wrong format. After reorganizing sections, I got 3 interviews in 2 weeks.",
-            author: "Marcus Johnson",
-            role: "Product Manager",
-            company: "Airbnb",
-            score: "88/100",
-          },
-          {
-            quote: "As a career switcher, I didn't know which keywords mattered. ResuScore's skill gap analysis was exactly what I needed to translate my experience.",
-            author: "Emily Rodriguez",
-            role: "Data Analyst",
-            company: "Shopify",
-            score: "85/100",
-          },
-        ].map((testimonial, index) => (
-          <article key={index} className="card-elevated p-8 animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
-            <div className="flex items-center gap-1 mb-6" aria-label="Rating: 5 out of 5 stars">
-              {[...Array(5)].map((_, i) => (
-                <svg key={i} className="w-5 h-5 text-[var(--color-warning-400)]" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                </svg>
-              ))}
-            </div>
-            <p className="text-[var(--color-text-secondary)] mb-6 leading-relaxed">"{testimonial.quote}"</p>
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--color-brand-400)] to-[var(--color-accent-400)] flex items-center justify-center text-white font-semibold text-lg">
-                {testimonial.author.charAt(0)}
-              </div>
-              <div>
-                <p className="font-semibold text-[var(--color-text-primary)]">{testimonial.author}</p>
-                <p className="text-sm text-[var(--color-text-tertiary)]">{testimonial.role} at {testimonial.company}</p>
-              </div>
-            </div>
-            <div className="mt-6 pt-6 border-t border-[var(--color-border-light)]">
-              <span className="badge-success">Final Score: {testimonial.score}</span>
-            </div>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-);
-
-const FAQ = () => (
-  <section id="faq" className="section bg-[var(--color-bg-secondary)]">
-    <div className="container mx-auto px-4 md:px-8">
-      <div className="max-w-2xl mx-auto text-center mb-16">
-        <h2 className="mb-4">Frequently Asked Questions</h2>
-        <p className="text-[var(--color-text-secondary)] text-lg">
-          Everything you need to know about ResuScore.
-        </p>
-      </div>
-
-      <div className="max-w-3xl mx-auto">
-        <dl className="space-y-4">
-          {[
-            {
-              question: "How does the ATS simulation work?",
-              answer: "Our AI models how real Applicant Tracking Systems parse resumes — checking file format compatibility, keyword density, section headers, date formatting, and structural hierarchy. We then score your resume against the specific job description you provide.",
-            },
-            {
-              question: "Do I need to create an account?",
-              answer: "No! ResuScore works completely without an account. Just upload your resume and job description to get instant feedback. Your data stays in your browser's local storage.",
-            },
-            {
-              question: "Is my resume data private and secure?",
-              answer: "Yes. Your resume never leaves your browser. All processing happens locally using Web APIs. We don't upload, store, or see your resume content. You own your data completely.",
-            },
-            {
-              question: "What file formats are supported?",
-              answer: "Currently we support PDF files up to 20MB. PDF is the most ATS-friendly format and preserves your formatting for accurate analysis.",
-            },
-            {
-              question: "How accurate is the keyword matching?",
-              answer: "Our analysis uses advanced NLP to identify both exact keyword matches and semantic equivalents. We detect required skills, certifications, tools, and experience patterns from the job description and check for their presence in your resume.",
-            },
-            {
-              question: "Can I use this for multiple job applications?",
-              answer: "Absolutely. Each scan is tied to a specific job description. You can scan the same resume against different job postings to tailor it for each application. No limits on scans.",
-            },
-            {
-              question: "What makes ResuScore different from other resume checkers?",
-              answer: "Most tools only check formatting. ResuScore combines ATS simulation + semantic keyword analysis + section-by-section scoring + personalized explanations. We tell you not just what's wrong, but why it matters and how to fix it.",
-            },
-          ].map((faq, index) => (
-            <div key={index} className="card overflow-hidden animate-fade-in" style={{ animationDelay: `${index * 50}ms` }}>
-              <button
-                className="w-full px-6 py-4 flex items-center justify-between text-left focus:ring-0"
-                aria-expanded="false"
-              >
-                <span className="font-medium text-[var(--color-text-primary)]">{faq.question}</span>
-                <svg className="w-5 h-5 text-[var(--color-text-tertiary)] shrink-0 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/>
-                </svg>
-              </button>
-              <dd className="px-6 pb-4 text-[var(--color-text-secondary)] border-t border-[var(--color-border-light)]">
-                {faq.answer}
-              </dd>
-            </div>
-          ))}
-        </dl>
-      </div>
-    </div>
-  </section>
-);
-
 const CTASection = () => (
   <section className="section relative overflow-hidden">
     <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-brand-600)] via-[var(--color-brand-700)] to-[var(--color-brand-800)]" aria-hidden="true"/>
@@ -474,7 +367,7 @@ const CTASection = () => (
           </Link>
         </div>
         <p className="mt-6 text-[var(--color-brand-200)] text-sm">
-          No credit card required · Results in 30 seconds · No account needed · Private & secure
+          No credit card required · Results in 30 seconds · No account needed · Private &amp; secure
         </p>
       </div>
     </div>
@@ -596,8 +489,6 @@ export default function Home() {
       <TrustBadges />
       <Features />
       <HowItWorks />
-      <Testimonials />
-      <FAQ />
       <CTASection />
       <Footer />
     </main>
