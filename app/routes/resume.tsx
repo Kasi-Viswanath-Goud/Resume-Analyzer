@@ -277,22 +277,24 @@ const Resume = () => {
                                         )}
                                     </div>
                                 </div>
-                                <div className="aspect-[4/5] relative bg-[var(--color-neutral-100)]">
+                                <div className="relative bg-[var(--color-neutral-100)] min-h-[500px]">
                                     {imageUrl ? (
-                                        <div className="absolute inset-0 p-4">
+                                        <div className="p-4">
                                             {resumeUrl ? (
-                                                <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="block h-full">
+                                                <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="block">
                                                     <img
                                                         src={imageUrl}
-                                                        className="w-full h-full object-contain rounded-lg shadow-sm hover:opacity-95 transition-opacity"
+                                                        className="w-full max-w-full h-auto object-contain rounded-lg shadow-sm hover:opacity-95 transition-opacity"
                                                         alt={`${resumeData?.companyName || 'Resume'} preview`}
+                                                        style={{ maxHeight: '70vh' }}
                                                     />
                                                 </a>
                                             ) : (
                                                 <img
                                                     src={imageUrl}
-                                                    className="w-full h-full object-contain rounded-lg shadow-sm"
+                                                    className="w-full max-w-full h-auto object-contain rounded-lg shadow-sm"
                                                     alt={`${resumeData?.companyName || 'Resume'} preview`}
+                                                    style={{ maxHeight: '70vh' }}
                                                 />
                                             )}
                                         </div>

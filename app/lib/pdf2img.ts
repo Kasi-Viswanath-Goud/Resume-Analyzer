@@ -35,7 +35,7 @@ export async function convertPdfToImage(
         const pdf = await lib.getDocument({ data: arrayBuffer }).promise;
         const page = await pdf.getPage(1);
 
-        const viewport = page.getViewport({ scale: 2 });
+        const viewport = page.getViewport({ scale: 3.5 });
         const canvas = document.createElement("canvas");
         const context = canvas.getContext("2d");
 
