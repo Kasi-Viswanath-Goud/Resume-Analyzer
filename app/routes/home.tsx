@@ -391,58 +391,6 @@ const Testimonials = () => (
   </section>
 );
 
-const Pricing = () => (
-  <section id="pricing" className="section">
-    <div className="container mx-auto px-4 md:px-8">
-      <div className="max-w-2xl mx-auto text-center mb-16">
-        <h2 className="mb-4">Completely Free</h2>
-        <p className="text-[var(--color-text-secondary)] text-lg">
-          No hidden fees, no subscriptions, no limits. Just powerful AI resume analysis.
-        </p>
-      </div>
-
-      <div className="max-w-xl mx-auto">
-        <div className="card-elevated p-8 md:p-10 text-center">
-          <div className="w-16 h-16 rounded-2xl bg-[var(--color-accent-100)] text-[var(--color-accent-600)] flex items-center justify-center mx-auto mb-6">
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-            </svg>
-          </div>
-          <h3 className="text-2xl md:text-3xl font-display font-bold text-[var(--color-text-primary)] mb-4">Free Forever</h3>
-          <p className="text-[var(--color-text-secondary)] text-lg mb-8">
-            Unlimited resume scans, detailed feedback, and keyword analysis — all at no cost.
-          </p>
-          <ul className="space-y-3 mb-8 text-left max-w-md mx-auto" role="list">
-            {[
-              "Unlimited resume scans per month",
-              "ATS compatibility scoring",
-              "Keyword gap analysis",
-              "Detailed section breakdowns",
-              "Actionable improvement tips",
-              "PDF upload support (up to 20MB)",
-              "No account required",
-              "Data stays in your browser",
-            ].map((feature, i) => (
-              <li key={i} className="flex items-center gap-3 text-[var(--color-text-secondary)]">
-                <svg className="w-5 h-5 text-[var(--color-accent-500)] shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                </svg>
-                {feature}
-              </li>
-            ))}
-          </ul>
-          <Link to="/upload" className="btn-primary btn-xl inline-flex w-full sm:w-auto">
-            Start Free Scan
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-            </svg>
-          </Link>
-        </div>
-      </div>
-    </div>
-  </section>
-);
-
 const FAQ = () => (
   <section id="faq" className="section bg-[var(--color-bg-secondary)]">
     <div className="container mx-auto px-4 md:px-8">
@@ -649,7 +597,6 @@ export default function Home() {
       <Features />
       <HowItWorks />
       <Testimonials />
-      <Pricing />
       <FAQ />
       <CTASection />
       <Footer />
