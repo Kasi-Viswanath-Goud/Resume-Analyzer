@@ -35,35 +35,23 @@ const Hero = () => (
   <section className="relative pt-20 md:pt-28 lg:pt-36 pb-16 md:pb-24 overflow-hidden">
     <div className="container mx-auto px-4 md:px-8 relative z-10">
       <div className="max-w-4xl mx-auto text-center">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--color-brand-50)] text-[var(--color-brand-700)] text-sm font-medium mb-8 animate-fade-in">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-pulse absolute top-0 left-0 h-full w-full rounded-full bg-[var(--color-brand-500)]"></span>
-            <span className="relative h-full w-full rounded-full bg-[var(--color-brand-500)]"></span>
-          </span>
-          New: AI Resume Grader with Job Match Analysis
-        </div>
-
-        {/* Hero Sub-headline */}
-        <h1 className="text-gradient-hero mb-6 animate-slide-up stagger-1 max-w-2xl mx-auto">
+        {/* Hero Headline */}
+        <h1 className="text-gradient-hero mb-6 animate-slide-up max-w-2xl mx-auto">
           Missing Keywords Costing You Interviews? Find Out in 30 Seconds
         </h1>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 animate-slide-up stagger-2">
+        {/* CTA Button */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 animate-slide-up">
           <Link to="/upload" className="btn-primary btn-lg w-full sm:w-auto group">
             <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
             </svg>
             Know Your CV Score
           </Link>
-          <Link to="#how-it-works" className="btn-outline btn-lg w-full sm:w-auto">
-            How It Works
-          </Link>
         </div>
 
         {/* Trust Indicators */}
-        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-sm animate-fade-in stagger-3">
+        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-sm animate-fade-in stagger-2">
           <div className="flex items-center gap-1.5 text-[var(--color-text-tertiary)]">
             <svg className="w-4 h-4 text-[var(--color-accent-500)]" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
@@ -92,7 +80,7 @@ const Hero = () => (
       </div>
 
       {/* Hero Visual */}
-      <div className="mt-16 relative animate-fade-in stagger-4">
+      <div className="mt-16 relative animate-fade-in stagger-3">
         <div className="max-w-5xl mx-auto">
           <div className="relative bg-white rounded-2xl shadow-2xl border border-[var(--color-border-light)] overflow-hidden">
             <div className="p-6 md:p-8">
