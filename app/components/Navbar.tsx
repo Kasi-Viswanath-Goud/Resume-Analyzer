@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router";
-import { LogoMark } from "~/components/Logo";
+
 
 const Navbar = () => {
     const location = useLocation();
@@ -14,7 +14,7 @@ const Navbar = () => {
                 <div className="flex items-center justify-between h-16 md:h-18">
                     {/* Logo */}
                     <Link to="/" className="flex items-center gap-2.5 text-[var(--color-brand-700)] hover:text-[var(--color-brand-600)] transition-colors" aria-label="ResuScore Home">
-                        <LogoMark className="h-9 w-9" />
+                        
                         <span className="font-display font-black uppercase tracking-[0.14em] text-lg md:text-xl">ResuScore</span>
                     </Link>
 

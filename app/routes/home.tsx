@@ -1,6 +1,5 @@
 ﻿import type { Route } from "./+types/home";
 import Navbar from "~/components/Navbar";
-import Logo from "~/components/Logo";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { useStorage, type KVItem } from "~/lib/storage";
@@ -36,11 +35,6 @@ const Hero = () => (
   <section className="relative pt-20 md:pt-28 lg:pt-36 pb-16 md:pb-24 overflow-hidden">
     <div className="container mx-auto px-4 md:px-8 relative z-10">
       <div className="max-w-4xl mx-auto text-center">
-        {/* Animated brand logo */}
-        <div className="flex justify-center mb-8 animate-scale-in">
-          <Logo markClassName="h-20 w-20 md:h-24 md:w-24" wordmarkClassName="text-xl md:text-2xl" />
-        </div>
-
         {/* Hero Headline */}
         <h1 className="text-gradient-hero mb-6 animate-slide-up stagger-1 max-w-2xl mx-auto">
           Missing Keywords Costing You Interviews? Find Out in 30 Seconds
