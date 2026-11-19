@@ -15,7 +15,12 @@ const Navbar = () => {
                     {/* Logo */}
                     <Link to="/" className="flex items-center gap-2.5 text-[var(--color-brand-700)] hover:text-[var(--color-brand-600)] transition-colors" aria-label="ResuScore Home">
                         
-                        <span className="font-display font-black uppercase tracking-[0.14em] text-lg md:text-xl">ResuScore</span>
+                        <span className="font-display font-black uppercase tracking-[0.14em] text-lg md:text-xl hidden">ResuScore</span>
+                        <img
+                            src="/logo-image.png"
+                            alt="ResuScore logo"
+                            className="h-8 w-auto logo-img"
+                        />
                     </Link>
 
                     {/* Desktop Navigation */}
