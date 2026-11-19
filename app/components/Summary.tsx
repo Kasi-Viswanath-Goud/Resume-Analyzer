@@ -60,29 +60,31 @@ const Category = ({ title, score = 0, icon }: CategoryProps) => {
     };
 
     return (
-        <div className="card p-5 transition-all hover:shadow-md hover:-translate-y-0.5">
-            <div className="flex items-start justify-between gap-4 mb-4">
-                <div className="flex items-center gap-3">
-                    {icon && (
-                        <div className="w-10 h-10 rounded-xl bg-[var(--color-brand-50)] text-[var(--color-brand-600)] flex items-center justify-center">
-                            {icon}
+        <div className="card p-5 transition-all hover:shadow-md hover:-translate-y-0.5 min-h-[160px]">
+            <div className="flex flex-col h-full justify-between gap-4">
+                <div className="flex items-start justify-between gap-4 mb-4">
+                    <div className="flex items-center gap-3">
+                        {icon && (
+                            <div className="w-10 h-10 rounded-xl bg-[var(--color-brand-50)] text-[var(--color-brand-600)] flex items-center justify-center">
+                                {icon}
+                            </div>
+                        )}
+                        <div>
+                            <h4 className="font-semibold text-[var(--color-text-primary)]">{title}</h4>
+                            <p className="text-xs text-[var(--color-text-tertiary)]">Category Score</p>
                         </div>
-                    )}
-                    <div>
-                        <h4 className="font-semibold text-[var(--color-text-primary)]">{title}</h4>
-                        <p className="text-xs text-[var(--color-text-tertiary)]">Category Score</p>
                     </div>
+                    <ScoreBadge score={safeScore} size="md" />
                 </div>
-                <ScoreBadge score={safeScore} size="md" />
-            </div>
-            <div className="progress-bar">
-                <div
-                    className="progress-fill rounded-full"
-                    style={{
-                        width: `${safeScore}%`,
-                        background: gradientMap[color],
-                    }}
-                ></div>
+                <div className="progress-bar">
+                    <div
+                        className="progress-fill rounded-full"
+                        style={{
+                            width: `${safeScore}%`,
+                            background: gradientMap[color],
+                        }}
+                    ></div>
+                </div>
             </div>
         </div>
     );

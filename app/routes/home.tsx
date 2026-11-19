@@ -481,7 +481,6 @@ export default function Home() {
       <Navbar />
       <Hero />
       <TrustBadges />
-      <Features />
       <HowItWorks />
       <CTASection />
       <Footer />
